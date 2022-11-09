@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EditorController">
+   <children>
+      <TextField fx:id="stopTextField" layoutX="107.0" layoutY="70.0" promptText="Enter a stopID" />
+      <TextField fx:id="stopTimeTextField" layoutX="379.0" layoutY="70.0" promptText="Enter tripID, stopID" />
+      <Button layoutX="40.0" layoutY="70.0" mnemonicParsing="false" onAction="#editStop" text="Edit Stop" />
+      <Button layoutX="282.0" layoutY="70.0" mnemonicParsing="false" onAction="#editStopTime" text="Edit StopTime" />
+      <Button layoutX="46.0" layoutY="234.0" mnemonicParsing="false" onAction="#editTrip" text="Edit Trip" />
+      <Button layoutX="284.0" layoutY="234.0" mnemonicParsing="false" onAction="#editRoute" text="Edit Route" />
+      <TextArea fx:id="stopData" layoutX="46.0" layoutY="107.0" prefHeight="67.0" prefWidth="211.0" />
+      <TextField fx:id="tripTextField" layoutX="110.0" layoutY="234.0" prefHeight="25.0" prefWidth="143.0" promptText="Enter tripID" />
+      <TextField fx:id="routeTextField" layoutX="364.0" layoutY="234.0" prefHeight="25.0" prefWidth="164.0" promptText="Enter routeID" />
+      <TextArea fx:id="stopTimeData" layoutX="285.0" layoutY="107.0" prefHeight="67.0" prefWidth="244.0" />
+      <TextArea fx:id="tripData" layoutX="46.0" layoutY="272.0" prefHeight="67.0" prefWidth="211.0" />
+      <TextArea fx:id="routeData" layoutX="287.0" layoutY="272.0" prefHeight="67.0" prefWidth="244.0" />
+      <Button layoutX="46.0" layoutY="174.0" mnemonicParsing="false" onAction="#saveStop" text="Save" />
+      <Button layoutX="46.0" layoutY="340.0" mnemonicParsing="false" onAction="#saveTrip" text="Save" />
+      <Button layoutX="287.0" layoutY="340.0" mnemonicParsing="false" onAction="#saveRoute" text="Save" />
+      <Button layoutX="287.0" layoutY="174.0" mnemonicParsing="false" onAction="#saveStopTime" text="Save" />
+   </children>
+</Pane>

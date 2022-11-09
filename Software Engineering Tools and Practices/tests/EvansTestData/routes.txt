@@ -1,0 +1,6 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+30X,MCTS,30X,Sherman - WisconsinEXpress,,3,,008345,
+44U,MCTS,44U,Fair Park - Hales CornersUBUS,,3,,008345,
+53,MCTS,53,Lincoln Avenue,,3,,008345,
+54,MCTS,54,Mitchell - Burnham,,3,,008345,
+GRE,MCTS,GRE,GreenLine,,3,,008345,
