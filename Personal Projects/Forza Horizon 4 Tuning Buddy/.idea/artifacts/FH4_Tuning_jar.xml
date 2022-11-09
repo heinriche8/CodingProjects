@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FH4 Tuning:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FH4_Tuning_jar</output-path>
+    <root id="archive" name="FH4 Tuning.jar">
+      <element id="module-output" name="FH4 Tuning" />
+    </root>
+  </artifact>
+</component>
