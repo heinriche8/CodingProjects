@@ -1,0 +1,7 @@
+waveforms.c:18:11:sineWave	40	static
+waveforms.c:45:11:triWave	40	static
+waveforms.c:68:11:sawtoothWave	40	static
+waveforms.c:87:6:wave_Init	32	static
+waveforms.c:135:6:wave_Start	40	static
+waveforms.c:170:6:wave_Stop	16	static
+waveforms.c:188:6:TIM6_DAC_IRQHandler	16	static

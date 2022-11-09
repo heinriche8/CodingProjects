@@ -1,0 +1,8 @@
+LCD.c:20:13:LCD_WriteInstruction	24	static
+LCD.c:54:13:LCD_WriteData	24	static
+LCD.c:86:6:LCD_Init	16	static
+LCD.c:131:6:LCD_Clear	8	static
+LCD.c:143:6:LCD_Home	8	static
+LCD.c:153:6:LCD_MoveCursor	24	static
+LCD.c:175:10:LCD_PrintString	32	static
+LCD.c:197:10:LCD_PrintNum	32	static
