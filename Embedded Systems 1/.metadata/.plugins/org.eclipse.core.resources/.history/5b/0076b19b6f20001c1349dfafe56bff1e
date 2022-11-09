@@ -1,0 +1,14 @@
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.equ DEFAULT_CLOCK, 0x00F42400	// 16 million, aka 16Mz
+
+// 	Function: delay_ms
+//	Description:
+//		Busy loop that takes the value stored in Register 0 and waits that many milliseconds
+//	Args:
+//		R0 - Desired delay in milliseconds
+delay_ms:
+	PUSH {R0-R12, LR}

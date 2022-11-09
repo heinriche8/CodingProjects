@@ -1,0 +1,70 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		delay.S
+//	Description of File:
+//		Originally created 9/28/2021 for Lab 3
+//		Modified 10/19/2021 for Lab 6, conversion to using
+//		our board's dedicated timers
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+// Literal Pool
+.equ TIM2_BASE,		0x40000000	// Timer 2 base address
+.equ GPIOA_BASE, 	0x40020000	// GPIO A base address
+.equ RCC_BASE, 		0x40023800	// RCC base address
+
+.equ GPIO_MODER, 	0x0			// Offset to the mode register for all GPIO ports
+.equ GPIO_ALTFUNCT, 0b10		// MODER code for alternate function
+.equ RCC_AHB1ENR, 	0x30		// Offset from RCC to AHB1ENR
+.equ RCC_GPIOAEN, 	1 << 0		// Location of the GPIOA Enabler
+
+
+// Globally exposed functions
+.global delay_setup
+.global delay_ms
+.global delay_us
+.global delay_sec
+
+
+// 16,000 clock pulses in one millisecond
+// Possibly use a 32-bit timer with a clock division of 2 or 4
+//	-> Use TIM2 (32-bit)
+//	-> TIM2_CH1 = PA0
+// Then multiply the desired delay by 16k/[clk]
+
+delay_setup:
+	PUSH {R0-R12, LR}
+
+	// Enable GPIOA
+	LDR R1, =RCC_BASE			// Load RCC base address
+    LDR R2, [R1, #RCC_AHB1ENR]	// Read from the AHB1 Enable Register
+    ORR R2, #RCC_GPIOAEN		// Apply GPIOA Enable mask
+    STR R2, [R1, #RCC_AHB1ENR]	// Write back to memory
+
+	// Set PA0 as alternate function
+    LDR R2, [R1, #GPIO_MODER]	// Load the current contents of the mode register
+    MOV R3, #
+    BFI R2, R3, #0, #2
+    STR R2, [R1, #GPIO_MODER]	// Write
+
+    POP {R0-R12, PC}
+
+// 16,000 clock pulses in one millisecond
+// Possibly use a 32-bit timer with a clock division of 2 or 4
+// Then multiply the desired delay by 16k/[clk]
+delay_ms:
+
+// Same general idea as millisecond, figure out how many pulses in a microsecond
+delay_us:
+
+// Use the largest clock division.
+delay_sec:

@@ -1,0 +1,8 @@
+"./Src/ASCII.o"
+"./Src/LCD_Control.o"
+"./Src/LED.o"
+"./Src/keypad.o"
+"./Src/main.o"
+"./Src/timer_delay.o"
+"./Src/tone.o"
+"./Startup/startup_stm32f446retx.o"

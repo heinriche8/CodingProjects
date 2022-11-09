@@ -1,0 +1,37 @@
+#Evan Heinrich
+#CE2801 sect. 011
+#9/2//2021
+#
+#subroutines.S
+#Description of File
+#	Lab 3, subroutines used in future labs
+#(opt) Dependancies: N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global delay_ms
+
+.equ DEFAULT_CLOCK, 0x00F42400	// 16 million, aka 16Mz
+
+// 	Function: delay_ms
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Busy loop that takes the value stored in Register 0 and waits that many milliseconds
+//		->	Instrustions take about 62.5ns
+//		->	SUB takes 1 clock
+//		->	Branches take 2 clocks
+//		R0 = 4000 (dec) = 1ms
+//		R0 LSL 13
+//	Args:
+//		R0 - Desired delay in milliseconds
+//	Returns:
+//		Void
+//	Used Registers:
+//
+delay_ms:
+	PUSH {R0-R12, LR}	// Back up all registers
+

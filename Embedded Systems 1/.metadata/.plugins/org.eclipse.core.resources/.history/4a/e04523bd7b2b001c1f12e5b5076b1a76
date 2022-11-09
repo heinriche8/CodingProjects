@@ -1,0 +1,85 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/12/2021
+//
+//	File:
+//		keypad.S
+//	Description of File:
+//		Lab 5 Keypad API
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+//		keypad.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+// Global Functions
+.global Key_Init
+.global Key_GetKey_NoBlock
+.global Key_GetKey
+.global Key_GetChar
+
+// Constants
+.equ RCC_BASE, 		0x40023800	// Base address for RCC
+.equ RCC_AHB1ENR, 	0x30		// Offset from RCC to AHB1ENR
+.equ RCC_GPIOCEN, 	1 << 2		// Location of the GPIOC Enabler
+.equ GPIOC_BASE, 	0x40020800	// Base address for GPIOC
+.equ GPIO_MODER, 	0x0			// Offset to the mode register for all GPIO ports
+.equ GPIO_ODR, 		0x14		// Offset to the ODR for all GPIO ports
+.equ GPIO_IDR,		0x10		// Offset to the IDR for all GPIO ports
+.equ GPIO_PUPDR,	0x0C		// Offset to the PUPDR for all GPIO ports
+.equ ROW_INPUT,		0xAA		// Mask to set rows as inputs and columns as outputs
+.equ COL_INPUT,		0xAA << 8	// Mask to set columns as inputs and rows as outputs
+
+
+// 	Function: Key_Init
+//	Register-safe!
+//	Description:
+//		Initializes the GPIO port for use with the keypad
+//	Args:
+//		N/A
+//	Returns:
+//		N/A
+//	Register Use:
+//		R1	-	Instructions/Commands
+//		R2	-	Masks
+//		R3	-	Masks
+// Keypad lives on PC0-PC7
+// Row[0] = PC4; Row[3] = PC7
+// Col[0] = PC0; Col[3] = PC3
+Key_Init:
+	PUSH {R1-R3, LR}			// Backup
+
+	LDR R1, =RCC_BASE			// Load RCC base address
+	LDR R2, [R1, #RCC_AHB1ENR]	// Read from the RCC AHB1 enable register
+	ORR R2, #RCC_GPIOCEN		// Apply mask to enable GPIOC
+	STR R2, [R1, #RCC_AHB1ENR]	// Write back to the RCC
+
+	LDR R1, =GPIOC_BASE			// Load GPIOC base address
+	LDR R2, [R1, #GPIO_MODER]	// Read from the current mode register
+	ORR R2, #COL_INPUT			// Apply mask to set columns as inputs and rows as outputs
+	STR R2, [R1, #GPIO_MODER]	// Write back to the mode register
+
+	// R1 still contains GPIOC's base address, so now configure PUPDR
+
+	LDR R2, [R1, #GPIO_PUPDR]	// Read the current pull-up/down register
+	LDR R3, =0xFFFF				// Load the mask to set our pins to pull-up
+	ORR R2, R3					// Apply mask
+	STR R2, [R1, #GPIO_PUPDR]	// Write back to pull-up/down register
+
+	POP {R1-R3, PC}				// Restore & Return
+
+
+Key_GetKey_NoBlock:
+
+Key_GetKey:
+
+Key_GetChar:
+
+
+.section .rodata
+chars:	.ascii	"123A456B789C*0#D"

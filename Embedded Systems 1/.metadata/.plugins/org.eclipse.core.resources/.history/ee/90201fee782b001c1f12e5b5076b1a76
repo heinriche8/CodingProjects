@@ -1,0 +1,51 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/12/2021
+//
+//	File:
+//		keypad.S
+//	Description of File:
+//		Lab 5 Keypad API
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+//		keypad.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+// Global Functions
+.global Key_Init
+.global Key_GetKey_NoBlock
+.global Key_GetKey
+.global Key_GetChar
+
+// Constants
+.equ RCC_BASE, 		0x40023800	// Base address for RCC
+.equ RCC_AHB1ENR, 	0x30		// Offset from RCC to AHB1ENR
+.equ RCC_GPIOCEN, 	1 << 2		// Location of the GPIOC Enabler
+.equ GPIOC_BASE, 	0x40020800	// Base address for GPIOC
+.equ GPIO_MODER, 	0x0			// Offset to the mode register for all GPIO ports
+.equ GPIO_ODR, 		0x14		// Offset to the ODR for all GPIO ports
+.equ GPIO_IDR,		0x10		// Offset to the IDR for all GPIO ports
+.equ GPIO_PUPDR,	0x0C		// Offset to the PUPDR for all GPIO ports
+
+Key_Init:
+
+Key_GetKey_NoBlock:
+
+Key_GetKey:
+
+Key_GetChar:
+
+// Keypad lives on PC0-PC7
+// Row[0] = PC4; Row[3] = PC7
+// Col[0] = PC0; Col[3] = PC3
+ConfigPort:
+	[TODO: PUSH Registers]
+
+.section .rodata
+chars:	.ascii	"123A456B789C*0#D"

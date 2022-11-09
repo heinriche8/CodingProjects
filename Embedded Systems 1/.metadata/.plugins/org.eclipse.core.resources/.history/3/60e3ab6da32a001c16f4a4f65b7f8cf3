@@ -1,0 +1,91 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/5/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Lab 4 driver program
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global main
+
+main:
+
+	BL LCD_Init			// Initialize display
+
+	LDR R1, =msg04
+	BL LCD_PrintString
+
+	MOV R0, #1			// Second row index
+	MOV R1, #0			// First column index
+	BL LCD_MoveCursor	// Move the cursor
+
+	LDR R1, =msg05
+	BL LCD_PrintString
+
+
+
+	LDR R1, =msg01		// Load address for the countdown message
+	BL LCD_PrintString	// Print the string
+
+	MOV R0, #1			// Second row index
+	MOV R1, #0			// First column index
+	BL LCD_MoveCursor	// Move the cursor
+
+	LDR R1, =msg02		// Load address for the second string
+	BL LCD_PrintString	// Print the second string
+
+	LDR R1, =0xBB8		// Prep 3 second delay
+	BL delay_ms			// Execute 3 second delay
+
+	BL LCD_Clear
+
+	MOV R7, #100		// Initial countdown value
+
+1:	MOV R0, #1			// Second row index
+	MOV R1, #0			// First column index
+	BL LCD_MoveCursor	// Move the cursor
+
+	MOV R1, R7			// Load the countdown number
+	BL LCD_PrintNum		// Display the countdown number
+
+	BL LCD_Home			// Home the cursor
+
+	LDR R1, =0x3E8		// Prep 1 second delay
+	BL delay_ms			// Execute 1 second delay
+
+	SUBS R7, R7, #1		// Decrement countdown value
+
+	IT MI				// If the next count is negative
+		BMI done		// Print done
+	B 1b				// Otherwise continue looping
+
+done:
+	BL LCD_Home
+
+	LDR R1, =msg03		// Load address for "Done"
+	BL LCD_PrintString	// Print "Done"
+
+	B end				// Infinite loop
+
+
+
+end: B end
+
+
+// RAM starts at address 0x20000000
+.section .rodata
+msg01: 	.asciz "It's the final"
+msg02:	.asciz "countdown!"
+msg03:	.asciz "Done"
+msg04:	.asciz "Testing large"
+msg05:	.asciz "number..."

@@ -1,0 +1,106 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	11/12/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Main program of Lab 8
+//		Temperature Monitor
+//	(opt) Dependencies:
+//		N/A
+
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global mV_to_C
+.global ADC_to_mV
+.global C_to_F
+
+
+// Convert millivolts into degrees C according to our
+// development board's TMP36 sensor
+// R0 = Return, Whole number value of degrees C
+// R1 = Return, Decimal value of degrees C
+// R2 = Argument, mV
+mV_to_C:
+	PUSH {R2, R3, LR}
+
+	// Convert number to ASCII to extract
+	// Decimal value
+	MOV R1, R2
+	BL num_to_ASCII
+
+	// R0 contains the ASCII now
+
+	// Extract the number from the last digit
+	// All ASCII numbers are 0x3N where N is the number,
+	// so it can be extracted by and-ing with 0xF
+	MOV R1, R0
+	MOV R3, #0x0F
+	AND R1, R3
+	// R1 now contains decimal value of temp
+
+	// Divide millivolt value by 10
+	MOV R0, R2		// Move millivolts into R0
+	MOV R3, #10		// Prepare to divide by 10
+	UDIV R0, R0, R3	// Divide by 10
+
+	// Subtract our offset
+	SUB R0, #45
+	// R0 now contains the whole number portion of temp
+
+	// Return
+	POP {R2, R3, PC}
+
+
+// Converts a celsius number to Fahrenheit
+// R0 = Whole Number Fahrenheit
+// R1 = Decimal val. Fahrenheit
+// R2 = Whole Number Celsius
+// R3 = Decimal val. Celsius
+C_to_F:
+	PUSH {R2-R4, LR}
+
+	// Celsius * 18
+	MOV R4, #18
+	MUL R2, R4
+
+	// Above / 10
+	MOV R4, #10
+	UDIV R2, R4
+
+	// Offset for C to F
+	ADD R2, #32
+
+	// R2 now contains Whole number F
+	MOV R0, R2
+
+	// Apply the same conversion to the decimal value
+	MOV R4, #18
+	MUL R3, R4
+
+	MOV R4, #10
+	UDIV R3, R4
+
+	// Move into return register
+	MOV R1, R3
+
+	POP {R2-R4, PC}
+
+
+// Converts an ADC sample value into millivolts
+// R0 = Return, mV
+// R1 = Argument, ADC sample
+// This assumes 10-bit sampling
+ADC_to_mV:
+	PUSH {R1, R2, LR}
+
+	MOV R2, #3
+	MOV R0, R1
+	MUL R0, R2
+
+	POP {R1, R2, PC}

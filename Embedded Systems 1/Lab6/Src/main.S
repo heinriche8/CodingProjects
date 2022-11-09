@@ -1,0 +1,219 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/19/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Driver program for lab 6
+//		Supposed to be similar to a safe keypad,
+//		user enters a pin and presses an enter button.
+//		Will emit a success tone and light an LED, where
+//		the LED is an example of activating a servo or something
+//		if the pin was correct, otherwise a failure tone emits.
+//	(opt) Dependencies:
+//		timer_delay.S
+//		LCD_Control.S
+//		keypad.S
+//		ASCII.S
+//		LED.S
+//		tone.S
+
+
+// Program flow
+// Get character of keypad (blocking)
+// Compare to '*' and '#'
+// 		If '*' clear all entries
+//		If '#' compare string to code
+//		If neither, push character to display
+// If a char was displayed, increment counter for number of characters
+// If number of chars displayed = 16, newline
+// If number of chaes displayed = 32, attempt code
+// If string = code
+//		Light an LED
+//		Play success tone
+//		Only reset by reset button
+// If string != code
+//		Play fail tone
+//		Only reset by reset button
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.equ STRING_MAX, 32
+.equ LINE_MAX, 16
+
+.global main
+
+main:
+	// Initialization
+	BL delay_Init
+	BL LCD_Init
+	BL Key_Init
+	BL LED_Init
+	BL Tone_Setup
+
+	// Startup Messages
+	BL startup
+
+	// String size iterator
+	MOV R7, #0
+
+	// Line position
+	MOV R6, #0
+
+loop:
+	BL Key_GetChar		// Get character that was pressed
+	MOV R1, R0			// Move into argument register
+
+	CMP R1, #0x2A		// Compare to the char 0x2A, AKA '*'
+	IT EQ
+		BEQ clear		// If the character was '*', clear entry
+
+	CMP R1, #0x23		// Compare to the char 0x23, AKA '#'
+	BEQ compare			// If the character was '#', compare to the actual code
+
+	CMP R7, #LINE_MAX	// Compare string length to display width
+	IT EQ
+		BLEQ newline	// If there are 16 chars on display, start a new line
+
+	CMP R7, #STRING_MAX	// Compare string to max width
+	BEQ compare			// If the string is at max size, compare to the actual code
+
+	// If none of the above comparisons trigger, print the char and update entry
+	BL LCD_PrintChar	// Print the character
+	LDR R0, =ENTRY		// Load entry address
+	STRB R1, [R0, R7]	// Store the char at the current index
+	ADD R7, #1			// Increment string size
+
+	B loop
+
+end: B end
+
+compare:
+
+	// Use my string comparison method in ASCII.S to
+	// compare the user entry to the actual code
+	LDR R1, =CODE			// Load the address for the actual code
+	LDR R2, =ENTRY			// Load the address for the user entry
+	BL ASCII_StringCompare	// Compare the two
+
+	MOV R2, #0				// Clear success/fail light
+
+	CMP R0, #0				// Compare the results of string comparison to 0, aka equal
+	ITTT EQ
+		LDREQ R1, =good		// If they were equal, load the success message
+		MOVEQ R2, #1		// If equal, prep success LED
+		BLEQ Tone_Success	// Play the success tone
+
+	CMP R0, #0		// Playing success tone updates CPSR so redo comparison
+
+	ITT NE
+		LDRNE R1, =fail		// If they weren't equal, load the fail message
+		BLNE Tone_Failure	// Play the failure tone
+
+	BL LCD_Clear
+	BL LCD_PrintString		// Print the success/fail message
+	MOV R1, R2				// Prep to display success/fail LED
+	BL num_to_LED			// Display success/fail LED
+
+	// 3 second delay
+	MOV R1, #3
+	BL delay_sec
+
+	// Clear entry
+	B clear
+
+
+
+newline:
+	PUSH {R0, R1, LR}
+
+	CMP R6, #0				// Determine which line we are on
+	ITTTT EQ				// If on first line
+		MOVEQ R0, #1		// Second line
+		MOVEQ R1, #0		// First column
+		MOVEQ R6, #1		// Update line counter
+		BLEQ LCD_MoveCursor	// Move cursor
+
+	POP {R0, R1, LR}
+
+clear:
+	PUSH {R0, R1, R2}
+	MOV R0, #0			// Iterator
+	MOV R2, #0			// Clear value
+	LDR R1, =ENTRY		// Entry address
+
+	1:
+	STRB R2, [R1, R0]	// Overwrite 0
+	ADD R0, #1			// Increment iterator
+	SUBS R7, #1			// Decrement string size
+	BNE 1b				// Loop until string size is negative
+	MOV R7, #0			// Clear string size
+	BL LCD_Clear		// Clear display
+	POP {R0, R1, R2}
+	B loop				// Return to loop
+
+startup:
+	PUSH {R0-R1, LR}
+
+	// First line of first message
+	LDR R1, =msg1_1
+	BL LCD_PrintString
+
+	// Move to second line
+	MOV R0, #1
+	MOV R1, #0
+	BL LCD_MoveCursor
+
+	// Second line of first message
+	LDR R1, =msg1_2
+	BL LCD_PrintString
+
+	// Wait 5 seconds
+	MOV R1, #5
+	BL delay_sec
+
+	// Clear display
+	BL LCD_Clear
+
+	// First line of second message
+	LDR R1, =msg2_1
+	BL LCD_PrintString
+
+	// Move to second line
+	MOV R0, #1
+	MOV R1, #0
+	BL LCD_MoveCursor
+
+	// Second line of second message
+	LDR R1, =msg2_2
+	BL LCD_PrintString
+
+	// 5 second delay
+	MOV R1, #5
+	BL delay_sec
+
+	// Clear display
+	BL LCD_Clear
+
+	// Run rest of program
+	POP {R0-R1, PC}
+
+
+.section .rodata
+CODE:	.asciz "71293"
+good:	.asciz "Success!"
+fail:	.asciz "Wrong code!"
+msg1_1:	.asciz "Push buttons on"
+msg1_2:	.asciz "the keypad"
+msg2_1:	.asciz "Press * to clear"
+msg2_2:	.asciz "Press # to enter"
+
+.section .data
+ENTRY: .byte 0
+
+
+

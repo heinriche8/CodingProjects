@@ -1,0 +1,161 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/2/2021
+//
+//	File:
+//		num_to_ASCII.S
+//	Description of File:
+//		Lab 3, converts a provided integer value into ASCII characters
+//		representing that number.
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.equ MAX_VALUE, 0x270F	// Maximum representable value of 9999
+.equ ERR, 0x4572722E	// Error code, "Err." in ASCII
+.equ ONES_MASK, 0xFFF0	// Masks off the "ones" place BCD
+.equ TENS_MASK, 0xFF0F	// Masks off the "tens" place BCD
+.equ HUND_MASK, 0xF0FF	// Masks off the "hundreds" place BCD
+.equ THOU_MASK, 0x0FFF	// Masks off the "thousands" place BCD
+
+.global num_to_ASCII
+
+// 	Function: num_to_ASCII
+//	Register-safe! Pushes all general purpose registers besides return (R1-R12 & LR) to the stack
+//	Description:
+//		Converts a provided integer value into ASCII characters representing that number
+//	Args:
+//		R1	-	Integer to be converted to ASCII (4 chars MAX)
+//	Returns:
+//		R0	-	ASCII values representing the argument integer
+//	Register Use:
+//		R0	-	Return value
+//		R1	-	Argument
+//		R2	-	Scratch
+//		R3	-	Ones
+//		R4	-	Tens
+//		R5	-	Hundreds
+//		R6	-	Thousands
+//		R7	-	Mask
+num_to_ASCII:
+	PUSH {R1-R12, LR}	// Backup registers
+
+	LDR R2, =MAX_VALUE	// Load max value
+	CMP R1, R2			// Compare the argument to the maximum value
+	BGE error			// Return the error code if the argument is larger than the max.
+	MOV R2, R1			// Copy the argument for modification
+
+	MOV R6, #0			// Clear thousands counter
+mod1000:
+	SUBS R2, R2, #0x3E8	// Subtract 1000, update flags
+	ITET PL					// If positive
+		ADDPL R6, R6, #1	// Increment thousands counter
+		ADDMI R2, R2, #0x3E8// Add back 1000 if negative
+		BPL mod1000			// Otherwise continue looping
+
+	MOV R5, #0			// Clear hundreds counter
+mod100:
+	SUBS R2, R2, #0x64	// Subtract 100, update flags
+	ITET PL					//If positive
+		ADDPL R5, R5, #1	// Increment hundreds counter
+		ADDMI R2, R2, #0x64	// Add back 100 if negative
+		BPL mod100			// Otherwise continue looping
+
+	MOV R4, #0			// Clear tens register
+mod10:
+	SUBS R2, R2, #0xA	// Subtract 10, update flags
+	ITET PL					// If positive
+		ADDPL R4, R4, #1	// Increment tens counter
+		ADDMI R2, R2, #0xA	// Add back 10 if negative
+		BPL mod10			// Otherwise continue looping
+
+	MOV R3, R2			// Whatever is left is the ones place
+	MOV R2, #0			// Clear register 2
+
+	MOV R7, #0x30		// Load mask for numeric ASCII values
+
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R6		// Apply thousands place
+	LSL R2, R2, #8		// Shift left 8 for the hundreds place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R5		// Apply hundreds place
+	LSL R2, R2, #8		// Shift left 8 more for the tens place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R4		// Apply tens place
+	LSL R2, R2, #8		// Shift left last 8 time for the ones place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R3		// Apply ones place
+
+	MOV R0, R2			// Move return value
+
+	POP {R1-R12, LR}	// Restore registers
+	BX LR
+
+	error:
+	LDR R0, =ERR
+	POP {R1-R12, LR}
+	BX LR
+
+
+// 	Function: ASCII_StringCompare
+//	Register-safe!
+//	Description:
+//		Compares the contents of two null-terminated strings to determine if they
+//		are equal.
+//		The arguments are memory locations to null-terminated strings.
+//	Args:
+//		R1	-	First String
+//		R2	-	Second string
+//	Returns:
+//		R0	-	0 if equal
+//	Register Use:
+//
+ASCII_StringCompare:
+	PUSH {}
+
+	// Get lengths of strings
+	BL ASCII_StringLength	// Length of first string
+	MOV R3, R0				// Move length into a temp register
+	MOV R1, R2				// Move second string into arg register
+	BL ASCII_StringLength	// Length of second string
+	MOV R2, R0				// Move length into R2
+	MOV R1, R3				// Move backup of string 1 length into R1
+
+	// Compare lengths of strings
+	CMP R1, R2				// Compare lengths
+	IT GT					// If R1 > R2
+		MOVGT R0, #1		// Load 1 into the return register, aka not equal
+
+	IT LT
+
+	POP {}
+
+
+// 	Function: ASCII_StringLength
+//	Register-safe!
+//	Description:
+//		Determines the length of a null-terminated string in memory
+//	Args:
+//		R1	-	String address
+//	Returns:
+//		R0	-	Length
+//	Register Use:
+//
+ASCII_StringLength:
+	PUSH {R1, R2, LR}
+
+	MOV R0, #0			// Clear iterator
+
+1:
+	LDRB R2, [R1, R0]	// Load character at index R0
+	CMP R2, #0			// Determine if the char is null
+	ITT NE
+		ADDNE R0, #1	// Increment iterator if not zero
+		BNE 1b
+
+	POP {R1, R2, PC}

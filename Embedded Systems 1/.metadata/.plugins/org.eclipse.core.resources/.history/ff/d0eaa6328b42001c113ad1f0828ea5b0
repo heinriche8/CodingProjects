@@ -1,0 +1,96 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		LED_init.S
+//	Description of File:
+//		Lab 3, LED initialization used in future labs
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+// Constants
+.equ RCC_BASE, 0x40023800
+.equ RCC_AHB1ENR, 0x30 		// Offset from RCC_BASE
+.equ GPIOBEN, 1<<1 			// GPIOBEN lives on bit 1 of AHB1ENR so shift a 1 left by 1
+
+.equ GPIOB_BASE, 0x40020400
+.equ GPIOB_MODER, 0x00 		// Offset from GPIOB_BASE
+.equ GPIOB_ODR, 0x14		// Offset from GPIOB_BASE
+
+.global LED_Init
+
+// 	Function: num_to_LED_init
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Enables RCC for GPIOB
+//		Sets GPIOB_MODER for PB5-10 & PB12-15 as outputs
+//	Args:
+//		N/A
+//	Returns:
+//		Void
+//	Register Use:
+//		R1	-	Current main address
+//		R2	-	Working register where masks will be applied to
+//		R3	-	Masks
+LED_Init:
+	PUSH {R0-R12, LR}			// Backup registers
+
+	// Enable RCC For GPIOB
+	LDR R1, =RCC_BASE			// Load the RCC base address
+	LDR R2, [R1, #RCC_AHB1ENR]	// Load what is currently stored in the AHB1 Enabler
+	ORR R2, R2, #GPIOBEN		// Apply the mask to enable GPIOB
+	STR R2, [R1, #RCC_AHB1ENR]	// Write back the new AHB1 Enabler value
+
+	// Set GPIOB Pins as Output
+	LDR R1, =GPIOB_BASE 		// Load base address
+	LDR R2, [R1, #GPIOB_MODER]	// Load the GPIOB mode status
+	LDR R3, =0xFF3FFC00			// Load the output clearing mask
+	BIC R2, R2, R3				// Clear the modes
+	LDR R3, =0x55155400			// Load the output setting mask
+	ORR R2, R2, R3				// Overwrite with output set mask
+	STR R2, [R1, #GPIOB_MODER]	// Write back to memory
+
+	POP {R0-R12, LR}			// Restore registers
+	BX LR						// Return from subroutine
+
+.global LED_PrintNum
+// 	Function: num_to_LED
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Displays a number provided in R1 using the GPIOB LEDs
+//			->	Note: There are only 10 LEDs, so if the number in R0 uses
+//						more than 10 bits, bit 11+ will be masked off
+//	Args:
+//		R1 - Number to be displayed
+//	Returns:
+//		Void
+//	Register Usage:
+//		R1 	- 	Argument
+//		R2	-	Working register; will contain the desired contents of the ODR
+//		R3	-	Scratch/Addresses
+//		R4 	- 	Masks/Offsets
+LED_PrintNum:
+	PUSH {R0-R12, LR}	// Backup registers
+	MOV R2, #0			// Clear register 2 since it stores the modified value
+
+	LDR R4, =0xFFFFFC00	// Mask to clear all but lower then bits
+	BIC R3, R1, R4		// Apply the mask to Register 1 and store the result in a scratch register
+
+	BFI R2, R3, #5, #6	// Insert the lower portion of the pattern from R3 into R2
+	LSR R3, R3, #6		// Shift the number left 6 times, giving us the last 4 bits in R3[0..3]
+	BFI R2, R3, #12, #4	// Insert the upper portion
+
+	LDR R3, =GPIOB_BASE	// Set the address for GPIOB
+	MOV R4, #GPIOB_ODR	// Set the offset for the ODR
+	STR R2, [R3, R4]	// Write the value
+
+	POP {R0-R12, LR}	// Restore registers
+	BX LR				// Return from subroutine
+

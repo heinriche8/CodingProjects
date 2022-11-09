@@ -1,0 +1,36 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		num_to_LED.S
+//	Description of File:
+//		Lab 3, Displays a number on the 10 LEDs on GPIOB
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global num_to_LED
+
+// 	Function: num_to_LED
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Displays a number provided in R1 using the GPIOB LEDs
+//			->	Note: There are only 10 LEDs, so if the number in R0 uses
+//						more than 10 bits, bit 11+ will be masked off
+//	Args:
+//		R1 - Number to be displayed
+//	Returns:
+//		Void
+num_to_LED:
+	PUSH {R0-R12, LR}	// Backup registers
+
+	AND R1, R1, #0x3FF	// Mask off all but lower 10 bits
+
+	POP {R0-R12, LR}	// Restore registers
+	BX LR				// Return from subroutine

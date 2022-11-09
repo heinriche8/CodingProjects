@@ -1,0 +1,46 @@
+// Reserve one register for decimal value
+// Reserve another register for whole value
+// R0 = Whole Num. Return
+// R1 = Decimal Return
+// R2 = Argument
+mV_to_C:
+
+	// Convert number to ASCII to extract
+	// Decimal value
+	MOV R1, R2
+	BL num_to_ASCII
+
+	// R0 contains the ASCII now
+
+	// Extract the number from the last digit
+	// All ASCII numbers are 0x3N where N is the number,
+	// so it can be extracted by and-ing with 0xF
+	MOV R3, #0x0F
+	AND R1, R3, R0
+
+	// Clear 2 scratch registers
+	MOV R4, #0	// Masked chars
+	MOV R5, #0	// Temp. storage for whole number
+
+	// R1 now contains the decimal value
+	// R0 still contains unmodified ASCII
+	// R3 still contains mask to extract a digit
+
+	// Extract ones digit
+	LSR R0, #8		// Shift right one char
+	AND R4, R3, R0	// Extract digit, ones place
+	ADD
+
+
+C_to_F:
+
+// R0 = Return
+// R1 = Arg
+// This assumes 10-bit sampling
+ADC_to_mV:
+	PUSH {R1, R2, LR}
+
+	MOV R2, #3
+	MUL R0, R1, R2
+
+	POP {R1, R2, PC}

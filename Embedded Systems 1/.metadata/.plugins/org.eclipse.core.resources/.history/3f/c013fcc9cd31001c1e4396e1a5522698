@@ -1,0 +1,176 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		timer_delay.S
+//	Description of File:
+//		Originally created 9/28/2021 for Lab 3
+//		Modified 10/19/2021 for Lab 6, conversion to using
+//		our board's dedicated timers
+//	(opt) Dependencies:
+//		timer_delay.S
+//		LCD_Control.S
+//		keypad.S
+//		ASCII.S
+//		LED.S
+//		tone.S
+
+
+// Program flow
+// Get character of keypad (blocking)
+// Compare to '*' and '#'
+// 		If '*' clear all entries
+//		If '#' compare string to code
+//		If neither, push character to display
+// If a char was displayed, increment counter for number of characters
+// If number of chars displayed = 16, newline
+// If number of chaes displayed = 32, attempt code
+// If string = code
+//		Light an LED
+//		Play success tone
+//		Only reset by reset button
+// If string != code
+//		Play fail tone
+//		Only reset by reset button
+
+// TODO: Implement compare
+// TODO: Implement tone.S
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.equ STRING_MAX, 32
+.equ LINE_MAX, 16
+
+.global main
+
+main:
+	// Initialization
+	BL delay_Init
+	BL LCD_Init
+	BL Key_Init
+	BL LED_Init
+
+	// Startup Messages
+	BL startup
+
+	// String size iterator
+	MOV R7, #0
+
+	// Line position
+	MOV R6, #0
+
+loop:
+	BL Key_GetChar		// Get character that was pressed
+	MOV R1, R0			// Move into argument register
+
+	CMP R1, #0x2A		// Compare to the char 0x2A, AKA '*'
+	IT EQ
+		BEQ clear		// If the character was '*', clear entry
+
+	CMP R1, #0x23		// Compare to the char 0x23, AKA '#'
+	BEQ compare		// If the character was '#', compare to the actual code
+
+	CMP R7, #LINE_MAX	// Compare string length to display width
+	IT EQ
+		BLEQ newline	// If there are 16 chars on display, start a new line
+
+	CMP R7, #STRING_MAX	// Compare string to max width
+	BEQ compare		// If the string is at max size, compare to the actual code
+
+	// If none of the above comparisons trigger, print the char and update entry
+	BL LCD_PrintChar	// Print the character
+	LDR R0, =ENTRY		// Load entry address
+	STRB R1, [R0, R7]	// Store the char at the current index
+	ADD R7, #1			// Increment string size
+
+	B loop
+
+end: B end
+
+compare:
+
+	LDR R1, =CODE
+	LDR R2, =ENTRY
+	BL
+
+
+newline:
+	PUSH {R0, R1, LR}
+
+	CMP R6, #0				// Determine which line we are on
+	ITTTT EQ				// If on first line
+		MOVEQ R0, #1		// Second line
+		MOVEQ R1, #0		// First column
+		MOVEQ R6, #1		// Update line counter
+		BLEQ LCD_MoveCursor	// Move cursor
+
+	POP {R0, R1, LR}
+
+clear:
+	PUSH {R0, R1, R2}
+	MOV R0, #0			// Iterator
+	MOV R2, #0			// Clear value
+	LDR R1, =ENTRY		// Entry address
+
+	1:
+	STRB R2, [R1, R0]	// Overwrite 0
+	ADD R0, #1			// Increment iterator
+	SUBS R7, #1			// Decrement string size
+	BNE 1b				// Loop until string size is negative
+	MOV R7, #0			// Clear string size
+	BL LCD_Clear		// Clear display
+	POP {R0, R1, R2}
+	B loop				// Return to loop
+
+startup:
+	PUSH {R0-R1, LR}
+
+	LDR R1, =msg1_1
+	BL LCD_PrintString
+
+	MOV R0, #1
+	MOV R1, #0
+	BL LCD_MoveCursor
+
+	LDR R1, =msg1_2
+	BL LCD_PrintString
+
+	MOV R1, #5
+	BL delay_sec
+
+	BL LCD_Clear
+
+	LDR R1, =msg2_1
+	BL LCD_PrintString
+
+	MOV R0, #1
+	MOV R1, #0
+	BL LCD_MoveCursor
+
+	LDR R1, =msg2_2
+	BL LCD_PrintString
+
+	MOV R1, #5
+	BL delay_sec
+
+	BL LCD_Clear
+
+	POP {R0-R1, PC}
+
+
+.section .rodata
+CODE:	.asciz "71293"
+msg1_1:	.asciz "Push buttons on"
+msg1_2:	.asciz "the keypad"
+msg2_1:	.asciz "Press * to clear"
+msg2_2:	.asciz "Press # to enter"
+
+.section .data
+ENTRY: .byte 0
+
+
+

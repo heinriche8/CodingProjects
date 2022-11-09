@@ -1,0 +1,12 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		LED_init.S
+//	Description of File:
+//		Lab 3, LED initialization used in future labs
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives

@@ -1,0 +1,86 @@
+// Reserve one register for decimal value
+// Reserve another register for whole value
+// R0 = Whole Num. Return
+// R1 = Decimal Return
+// R2 = Argument
+// R3 = Masks
+
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global mV_to_C
+.global ADC_to_mV
+.global C_to_F
+
+mV_to_C:
+	PUSH {R2, R3, LR}
+
+	// Convert number to ASCII to extract
+	// Decimal value
+	MOV R1, R2
+	BL num_to_ASCII
+
+	// R0 contains the ASCII now
+
+	// Extract the number from the last digit
+	// All ASCII numbers are 0x3N where N is the number,
+	// so it can be extracted by and-ing with 0xF
+	MOV R1, R0
+	MOV R3, #0x0F
+	AND R1, R3
+	// R1 now contains decimal value of temp
+
+	// Divide millivolt value by 10
+	MOV R0, R2		// Move millivolts into R0
+	MOV R3, #10		// Prepare to divide by 10
+	UDIV R0, R0, R3	// Divide by 10
+
+	// Subtract our offset
+	SUB R0, #47
+	// R0 now contains the whole number portion of temp
+
+	// Return
+	POP {R2, R3, PC}
+
+// R0 = Whole Number Fahrenheit
+// R1 = Decimal val. Fahrenheit
+// R2 = Whole Number Celsius
+// R3 = Decimal val. Celsius
+C_to_F:
+	PUSH {R2, R4, LR}
+
+	// Celsius * 18
+	MOV R4, #18
+	MUL R2, R4
+
+	// Above / 10
+	MOV R4, #10
+	UDIV R2, R4
+
+	// Offset for C to F
+	ADD R2, #32
+
+	// R2 now contains Whole number F
+	MOV R0, R2
+
+
+	MOV R1, R3
+
+
+	POP {R2, R4, PC}
+
+
+// R0 = Return
+// R1 = Arg
+// This assumes 10-bit sampling
+ADC_to_mV:
+	PUSH {R1, R2, LR}
+
+	MOV R2, #3
+	MOV R0, R1
+	MUL R0, R2
+
+	POP {R1, R2, PC}

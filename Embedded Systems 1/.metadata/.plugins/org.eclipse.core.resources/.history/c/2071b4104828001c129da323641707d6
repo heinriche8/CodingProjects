@@ -1,0 +1,77 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/5/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Lab 4 driver program
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global main
+
+main:
+
+	BL LCD_Init			// Initialize display
+
+	LDR R1, =msg01		// Load address for the first string
+	BL LCD_PrintString	// Print the first string
+
+	MOV R0, #1			// Second row index
+	MOV R1, #0			// First column index
+	BL LCD_MoveCursor	// Move the cursor
+
+	LDR R1, =msg02		// Load address for the second string
+	BL LCD_PrintString	// Print the second string
+
+	LDR R1, =0xBB8		// Prep 3 second delay
+	BL delay_ms
+
+	BL LCD_Clear
+
+	MOV R7, #100		// Initial countdown value
+
+1:	MOV R0, #1			// Second row index
+	MOV R1, #6			// Seventh column index
+	BL LCD_MoveCursor	// Move the cursor
+
+	MOV R1, R7			// Load the current countdown value
+	BL LCD_PrintNum		// Print the current countdown value
+
+	LDR R1, =0x3E8		// Prep 1 second delay
+	BL delay_ms			// Execute delay
+
+	SUBS R7, R7, #1		// Decrement countdown & update flags
+
+	IT MI				// If the newly decremented value is negative
+		BMI done		// Print "Done"
+	B 1b				// Otherwise keep looping
+
+done:
+	MOV R0, #1			// Second row index
+	MOV R1, #6			// Seventh column index
+	BL LCD_MoveCursor	// Move cursor
+
+	LDR R1, =msg03		// Load address for "Done"
+	BL LCD_PrintString	// Print "Done"
+
+	B end				// Infinite loop
+
+
+
+end: B end
+
+
+// RAM starts at address 0x20000000
+.section .rodata
+msg01: 	.asciz "It's the final"
+msg02:	.asciz "countdown!"
+msg03:	.asciz "Done"

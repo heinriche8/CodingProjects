@@ -1,0 +1,17 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		tone.S
+//	Description of File:
+//		Initially will just hold an example success and failure tone
+//		and the code to make the MSOE development board piezo buzzer
+//		emit those tones
+//	(opt) Dependencies:
+//		timer_delay.S
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text

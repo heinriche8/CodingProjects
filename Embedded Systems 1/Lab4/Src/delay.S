@@ -1,0 +1,56 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		delay.S
+//	Description of File:
+//		Lab 3, Delay subroutine used in future labs
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global delay_ms
+.global delay_us
+
+// 	Function: delay_ms
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Busy loop that takes the value stored in Register 0 and waits that many milliseconds
+//		R1 = 4000 (dec) = 1ms
+//		R1 LSL 12 = R1 * 4096
+//	Args:
+//		R1 - Desired delay in milliseconds
+//	Returns:
+//		Void
+//	Register Use:
+//		R1	-	Argument
+delay_ms:
+	PUSH {R0-R12, LR}	// Back up all registers
+	LSL R1, R1, #12		// Conversion to milliseconds
+	1:					// Decrement loop
+		SUBS R1, R1, #1	// Decrement by 1
+		BNE 1b			// Loop if not zero
+	POP {R0-R12, LR}	// Restore registers
+	BX LR				// Return from subroutine
+
+// Busy loop for about R1 microseonds
+// Provided by Dr. Livingston in Lab 4
+delay_us:
+	// stack
+	PUSH {R1, LR}
+
+	LSL R1, R1, #3
+
+1:
+	SUBS R1, R1, #1
+	BNE 1b
+
+	// return
+	POP {R1, PC}
+

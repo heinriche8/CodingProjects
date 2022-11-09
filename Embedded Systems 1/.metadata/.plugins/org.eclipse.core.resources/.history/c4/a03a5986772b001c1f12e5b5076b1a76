@@ -1,0 +1,26 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/12/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Lab 4 driver program
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+//		keypad.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+Key_Init:
+
+Key_GetKey_NoBlock:
+
+Key_GetKey:
+
+Key_GetChar

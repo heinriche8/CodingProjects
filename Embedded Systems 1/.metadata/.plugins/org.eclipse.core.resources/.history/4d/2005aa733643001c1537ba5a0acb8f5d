@@ -1,0 +1,23 @@
+// Reserve one register for decimal value
+// Reserve another register for whole value
+// R0 = Whole Num. Return
+// R1 = Decimal Return
+// R2 = Argument
+mV_to_C:
+	MOV R1, R2
+	BL num_to_ASCII
+
+
+
+C_to_F:
+
+// R0 = Return
+// R1 = Arg
+// This assumes 10-bit sampling
+ADC_to_mV:
+	PUSH {R1, R2, LR}
+
+	MOV R2, #3
+	MUL R0, R1, R2
+
+	POP {R1, R2, PC}

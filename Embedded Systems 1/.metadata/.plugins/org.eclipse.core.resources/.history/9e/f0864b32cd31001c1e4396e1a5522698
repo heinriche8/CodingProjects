@@ -1,0 +1,17 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		timer_delay.S
+//	Description of File:
+//		Originally created 9/28/2021 for Lab 3
+//		Modified 10/19/2021 for Lab 6, conversion to using
+//		our board's dedicated timers
+//	(opt) Dependencies:
+//		timer_delay.S
+
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text

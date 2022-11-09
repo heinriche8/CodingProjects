@@ -1,0 +1,496 @@
+
+Lab3.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   000001c4  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000228  080001c4  080001c4  000101c4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  080003ec  080003f4  000103f4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  080003ec  080003ec  000103f4  2**0
+                  CONTENTS
+  4 .ARM          00000000  080003ec  080003ec  000103f4  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  080003ec  080003f4  000103f4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  080003ec  080003ec  000103ec  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  080003f0  080003f0  000103f0  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  000103f4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          0000001c  20000000  080003f4  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000604  2000001c  080003f4  0002001c  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000030  00000000  00000000  000103f4  2**0
+                  CONTENTS, READONLY
+ 12 .debug_line   000001dc  00000000  00000000  00010424  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_info   000000ba  00000000  00000000  00010600  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_abbrev 00000062  00000000  00000000  000106ba  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_aranges 000000a8  00000000  00000000  00010720  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_str    0000009a  00000000  00000000  000107c8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_ranges 00000020  00000000  00000000  00010868  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_frame  0000002c  00000000  00000000  00010888  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+080001c4 <__do_global_dtors_aux>:
+ 80001c4:	b510      	push	{r4, lr}
+ 80001c6:	4c05      	ldr	r4, [pc, #20]	; (80001dc <__do_global_dtors_aux+0x18>)
+ 80001c8:	7823      	ldrb	r3, [r4, #0]
+ 80001ca:	b933      	cbnz	r3, 80001da <__do_global_dtors_aux+0x16>
+ 80001cc:	4b04      	ldr	r3, [pc, #16]	; (80001e0 <__do_global_dtors_aux+0x1c>)
+ 80001ce:	b113      	cbz	r3, 80001d6 <__do_global_dtors_aux+0x12>
+ 80001d0:	4804      	ldr	r0, [pc, #16]	; (80001e4 <__do_global_dtors_aux+0x20>)
+ 80001d2:	f3af 8000 	nop.w
+ 80001d6:	2301      	movs	r3, #1
+ 80001d8:	7023      	strb	r3, [r4, #0]
+ 80001da:	bd10      	pop	{r4, pc}
+ 80001dc:	20000000 	.word	0x20000000
+ 80001e0:	00000000 	.word	0x00000000
+ 80001e4:	080003d4 	.word	0x080003d4
+
+080001e8 <frame_dummy>:
+ 80001e8:	b508      	push	{r3, lr}
+ 80001ea:	4b03      	ldr	r3, [pc, #12]	; (80001f8 <frame_dummy+0x10>)
+ 80001ec:	b11b      	cbz	r3, 80001f6 <frame_dummy+0xe>
+ 80001ee:	4903      	ldr	r1, [pc, #12]	; (80001fc <frame_dummy+0x14>)
+ 80001f0:	4803      	ldr	r0, [pc, #12]	; (8000200 <frame_dummy+0x18>)
+ 80001f2:	f3af 8000 	nop.w
+ 80001f6:	bd08      	pop	{r3, pc}
+ 80001f8:	00000000 	.word	0x00000000
+ 80001fc:	20000004 	.word	0x20000004
+ 8000200:	080003d4 	.word	0x080003d4
+
+08000204 <num_to_ASCII>:
+//		R4	-	Tens
+//		R5	-	Hundreds
+//		R6	-	Thousands
+//		R7	-	Mask
+num_to_ASCII:
+	PUSH {R1-R12, LR}	// Backup registers
+ 8000204:	e92d 5ffe 	stmdb	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+
+	LDR R2, =MAX_VALUE	// Load max value
+ 8000208:	f242 720f 	movw	r2, #9999	; 0x270f
+	CMP R1, R2			// Compare the argument to the maximum value
+ 800020c:	4291      	cmp	r1, r2
+	BGE error			// Return the error code if the argument is larger than the max.
+ 800020e:	da36      	bge.n	800027e <error>
+	MOV R2, R1			// Copy the argument for modification
+ 8000210:	460a      	mov	r2, r1
+
+	MOV R6, #0			// Clear thousands counter
+ 8000212:	f04f 0600 	mov.w	r6, #0
+
+08000216 <mod1000>:
+mod1000:
+	SUBS R2, R2, #0x3E8	// Subtract 1000, update flags
+ 8000216:	f5b2 727a 	subs.w	r2, r2, #1000	; 0x3e8
+	ITET PL					// If positive
+ 800021a:	bf56      	itet	pl
+		ADDPL R6, R6, #1	// Increment thousands counter
+ 800021c:	3601      	addpl	r6, #1
+		ADDMI R2, R2, #0x3E8// Add back 1000 if negative
+ 800021e:	f502 727a 	addmi.w	r2, r2, #1000	; 0x3e8
+		BPL mod1000			// Otherwise continue looping
+ 8000222:	e7f8      	bpl.n	8000216 <mod1000>
+
+	MOV R5, #0			// Clear hundreds counter
+ 8000224:	f04f 0500 	mov.w	r5, #0
+
+08000228 <mod100>:
+mod100:
+	SUBS R2, R2, #0x64	// Subtract 100, update flags
+ 8000228:	3a64      	subs	r2, #100	; 0x64
+	ITET PL					//If positive
+ 800022a:	bf56      	itet	pl
+		ADDPL R5, R5, #1	// Increment hundreds counter
+ 800022c:	3501      	addpl	r5, #1
+		ADDMI R2, R2, #0x64	// Add back 100 if negative
+ 800022e:	3264      	addmi	r2, #100	; 0x64
+		BPL mod100			// Otherwise continue looping
+ 8000230:	e7fa      	bpl.n	8000228 <mod100>
+
+	MOV R4, #0			// Clear tens register
+ 8000232:	f04f 0400 	mov.w	r4, #0
+
+08000236 <mod10>:
+mod10:
+	SUBS R2, R2, #0xA	// Subtract 10, update flags
+ 8000236:	3a0a      	subs	r2, #10
+	ITET PL					// If positive
+ 8000238:	bf56      	itet	pl
+		ADDPL R4, R4, #1	// Increment tens counter
+ 800023a:	3401      	addpl	r4, #1
+		ADDMI R2, R2, #0xA	// Add back 10 if negative
+ 800023c:	320a      	addmi	r2, #10
+		BPL mod10			// Otherwise continue looping
+ 800023e:	e7fa      	bpl.n	8000236 <mod10>
+
+	MOV R3, R2			// Whatever is left is the ones place
+ 8000240:	4613      	mov	r3, r2
+	MOV R2, #0			// Clear register 2
+ 8000242:	f04f 0200 	mov.w	r2, #0
+
+	MOV R7, #0x30		// Load mask for numeric ASCII values
+ 8000246:	f04f 0730 	mov.w	r7, #48	; 0x30
+
+	ORR R2, R2, R7		// Apply base mask
+ 800024a:	ea42 0207 	orr.w	r2, r2, r7
+	ORR R2, R2, R6		// Apply thousands place
+ 800024e:	ea42 0206 	orr.w	r2, r2, r6
+	LSL R2, R2, #8		// Shift left 8 for the hundreds place
+ 8000252:	ea4f 2202 	mov.w	r2, r2, lsl #8
+	ORR R2, R2, R7		// Apply base mask
+ 8000256:	ea42 0207 	orr.w	r2, r2, r7
+	ORR R2, R2, R5		// Apply hundreds place
+ 800025a:	ea42 0205 	orr.w	r2, r2, r5
+	LSL R2, R2, #8		// Shift left 8 more for the tens place
+ 800025e:	ea4f 2202 	mov.w	r2, r2, lsl #8
+	ORR R2, R2, R7		// Apply base mask
+ 8000262:	ea42 0207 	orr.w	r2, r2, r7
+	ORR R2, R2, R4		// Apply tens place
+ 8000266:	ea42 0204 	orr.w	r2, r2, r4
+	LSL R2, R2, #8		// Shift left last 8 time for the ones place
+ 800026a:	ea4f 2202 	mov.w	r2, r2, lsl #8
+	ORR R2, R2, R7		// Apply base mask
+ 800026e:	ea42 0207 	orr.w	r2, r2, r7
+	ORR R2, R2, R3		// Apply ones place
+ 8000272:	ea42 0203 	orr.w	r2, r2, r3
+
+	MOV R0, R2			// Move return value
+ 8000276:	4610      	mov	r0, r2
+
+	POP {R1-R12, LR}	// Restore registers
+ 8000278:	e8bd 5ffe 	ldmia.w	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	BX LR
+ 800027c:	4770      	bx	lr
+
+0800027e <error>:
+
+error:
+	LDR R0, =ERR
+ 800027e:	4802      	ldr	r0, [pc, #8]	; (8000288 <error+0xa>)
+	POP {R1-R12, LR}
+ 8000280:	e8bd 5ffe 	ldmia.w	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	BX LR
+ 8000284:	4770      	bx	lr
+ 8000286:	0000      	.short	0x0000
+	LDR R0, =ERR
+ 8000288:	4572722e 	.word	0x4572722e
+
+0800028c <LED_init>:
+//	Register Use:
+//		R1	-	Current main address
+//		R2	-	Working register where masks will be applied to
+//		R3	-	Masks
+LED_init:
+	PUSH {R0-R12, LR}			// Backup registers
+ 800028c:	e92d 5fff 	stmdb	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+
+	// Enable RCC For GPIOB
+	LDR R1, =RCC_BASE			// Load the RCC base address
+ 8000290:	4912      	ldr	r1, [pc, #72]	; (80002dc <num_to_LED+0x2a>)
+	LDR R2, [R1, #RCC_AHB1ENR]	// Load what is currently stored in the AHB1 Enabler
+ 8000292:	6b0a      	ldr	r2, [r1, #48]	; 0x30
+	ORR R2, R2, #GPIOBEN		// Apply the mask to enable GPIOB
+ 8000294:	f042 0202 	orr.w	r2, r2, #2
+	STR R2, [R1, #RCC_AHB1ENR]	// Write back the new AHB1 Enabler value
+ 8000298:	630a      	str	r2, [r1, #48]	; 0x30
+
+	// Set GPIOB Pins as Output
+	LDR R1, =GPIOB_BASE 		// Load base address
+ 800029a:	4911      	ldr	r1, [pc, #68]	; (80002e0 <num_to_LED+0x2e>)
+	LDR R2, [R1, #GPIOB_MODER]	// Load the GPIOB mode status
+ 800029c:	680a      	ldr	r2, [r1, #0]
+	LDR R3, =0xFF3FFC00			// Load the output clearing mask
+ 800029e:	4b11      	ldr	r3, [pc, #68]	; (80002e4 <num_to_LED+0x32>)
+	BIC R2, R2, R3				// Clear the modes
+ 80002a0:	ea22 0203 	bic.w	r2, r2, r3
+	LDR R3, =0x55155400			// Load the output setting mask
+ 80002a4:	4b10      	ldr	r3, [pc, #64]	; (80002e8 <num_to_LED+0x36>)
+	ORR R2, R2, R3				// Overwrite with output set mask
+ 80002a6:	ea42 0203 	orr.w	r2, r2, r3
+	STR R2, [R1, #GPIOB_MODER]	// Write back to memory
+ 80002aa:	600a      	str	r2, [r1, #0]
+
+	POP {R0-R12, LR}			// Restore registers
+ 80002ac:	e8bd 5fff 	ldmia.w	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	BX LR						// Return from subroutine
+ 80002b0:	4770      	bx	lr
+
+080002b2 <num_to_LED>:
+//		R1 	- 	Argument
+//		R2	-	Working register; will contain the desired contents of the ODR
+//		R3	-	Scratch/Addresses
+//		R4 	- 	Masks/Offsets
+num_to_LED:
+	PUSH {R0-R12, LR}	// Backup registers
+ 80002b2:	e92d 5fff 	stmdb	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	MOV R2, #0			// Clear register 2 since it stores the modified value
+ 80002b6:	f04f 0200 	mov.w	r2, #0
+
+	LDR R4, =0xFFFFFC00	// Mask to clear all but lower then bits
+ 80002ba:	4c0c      	ldr	r4, [pc, #48]	; (80002ec <num_to_LED+0x3a>)
+	BIC R3, R1, R4		// Apply the mask to Register 1 and store the result in a scratch register
+ 80002bc:	ea21 0304 	bic.w	r3, r1, r4
+
+	BFI R2, R3, #5, #6	// Insert the lower portion of the pattern from R3 into R2
+ 80002c0:	f363 124a 	bfi	r2, r3, #5, #6
+	LSR R3, R3, #6		// Shift the number left 6 times, giving us the last 4 bits in R3[0..3]
+ 80002c4:	ea4f 1393 	mov.w	r3, r3, lsr #6
+	BFI R2, R3, #12, #4	// Insert the upper portion
+ 80002c8:	f363 320f 	bfi	r2, r3, #12, #4
+
+	LDR R3, =GPIOB_BASE	// Set the address for GPIOB
+ 80002cc:	4b04      	ldr	r3, [pc, #16]	; (80002e0 <num_to_LED+0x2e>)
+	MOV R4, #GPIOB_ODR	// Set the offset for the ODR
+ 80002ce:	f04f 0414 	mov.w	r4, #20
+	STR R2, [R3, R4]	// Write the value
+ 80002d2:	511a      	str	r2, [r3, r4]
+
+	POP {R0-R12, LR}	// Restore registers
+ 80002d4:	e8bd 5fff 	ldmia.w	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	BX LR				// Return from subroutine
+ 80002d8:	4770      	bx	lr
+ 80002da:	0000      	.short	0x0000
+	LDR R1, =RCC_BASE			// Load the RCC base address
+ 80002dc:	40023800 	.word	0x40023800
+	LDR R1, =GPIOB_BASE 		// Load base address
+ 80002e0:	40020400 	.word	0x40020400
+	LDR R3, =0xFF3FFC00			// Load the output clearing mask
+ 80002e4:	ff3ffc00 	.word	0xff3ffc00
+	LDR R3, =0x55155400			// Load the output setting mask
+ 80002e8:	55155400 	.word	0x55155400
+	LDR R4, =0xFFFFFC00	// Mask to clear all but lower then bits
+ 80002ec:	fffffc00 	.word	0xfffffc00
+
+080002f0 <delay_ms>:
+//	Returns:
+//		Void
+//	Register Use:
+//		R1	-	Argument
+delay_ms:
+	PUSH {R0-R12, LR}	// Back up all registers
+ 80002f0:	e92d 5fff 	stmdb	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	LSL R1, R1, #12		// Conversion to milliseconds
+ 80002f4:	ea4f 3101 	mov.w	r1, r1, lsl #12
+	1:					// Decrement loop
+		SUBS R1, R1, #1	// Decrement by 1
+ 80002f8:	3901      	subs	r1, #1
+		BNE 1b			// Loop if not zero
+ 80002fa:	d1fd      	bne.n	80002f8 <delay_ms+0x8>
+	POP {R0-R12, LR}	// Restore registers
+ 80002fc:	e8bd 5fff 	ldmia.w	sp!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+	BX LR				// Return from subroutine
+ 8000300:	4770      	bx	lr
+
+08000302 <main>:
+.equ MAX_LOOP, 0x400	// Loop if less than 1024
+.equ DELAY_500, 0x1F4	// 500ms delay
+.equ DELAY_LONG, 0x1388	// long delay
+.equ ASCII, 0x2694		// Number to be converted to ASCII
+main:
+	BL LED_init			// Initialize the LEDs
+ 8000302:	f7ff ffc3 	bl	800028c <LED_init>
+
+08000306 <ascii>:
+
+ascii:
+	LDR R1, =ASCII		// Load the number being converted
+ 8000306:	f242 6194 	movw	r1, #9876	; 0x2694
+	BL num_to_ASCII		// Convert the number to ASCII
+ 800030a:	f7ff ff7b 	bl	8000204 <num_to_ASCII>
+1:
+	LDR R1, =DELAY_500	// Prepare the 500ms delay between digits
+ 800030e:	f44f 71fa 	mov.w	r1, #500	; 0x1f4
+	BL delay_ms			// Execute the delay between digits
+ 8000312:	f7ff ffed 	bl	80002f0 <delay_ms>
+	CMP R0, #0			// Determine if the digits register is empty
+ 8000316:	2800      	cmp	r0, #0
+	MOV R1, #0			// Empty the register holding the current digit
+ 8000318:	f04f 0100 	mov.w	r1, #0
+	ITTT NE				// If the digits register is not empty
+ 800031c:	bf1e      	ittt	ne
+		BFINE R1, R0, #0, #8	// Insert the next ASCII value into the current digit
+ 800031e:	f360 0107 	bfine	r1, r0, #0, #8
+		LSRNE R0, R0, #8		// Shift the register holding all digits to the next digit
+ 8000322:	0a00      	lsrne	r0, r0, #8
+		BLNE num_to_LED			// Display the current digit
+ 8000324:	f7ff ffc5 	blne	80002b2 <num_to_LED>
+	IT NE				// Another conditional block
+ 8000328:	bf18      	it	ne
+		BNE 1b			// Branch back to the beginning if the digits arent empty
+ 800032a:	e7f0      	bne.n	800030e <ascii+0x8>
+	LDR R1, =DELAY_LONG	// Load the long delay
+ 800032c:	f241 3188 	movw	r1, #5000	; 0x1388
+	BL delay_ms			// Execute the long delay
+ 8000330:	f7ff ffde 	bl	80002f0 <delay_ms>
+	B ascii				// Start process over again
+ 8000334:	e7e7      	b.n	8000306 <ascii>
+	...
+
+08000338 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000338:	480d      	ldr	r0, [pc, #52]	; (8000370 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800033a:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 800033c:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000340:	480c      	ldr	r0, [pc, #48]	; (8000374 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000342:	490d      	ldr	r1, [pc, #52]	; (8000378 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000344:	4a0d      	ldr	r2, [pc, #52]	; (800037c <LoopForever+0xe>)
+  movs r3, #0
+ 8000346:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000348:	e002      	b.n	8000350 <LoopCopyDataInit>
+
+0800034a <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 800034a:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 800034c:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 800034e:	3304      	adds	r3, #4
+
+08000350 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000350:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000352:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000354:	d3f9      	bcc.n	800034a <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000356:	4a0a      	ldr	r2, [pc, #40]	; (8000380 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000358:	4c0a      	ldr	r4, [pc, #40]	; (8000384 <LoopForever+0x16>)
+  movs r3, #0
+ 800035a:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 800035c:	e001      	b.n	8000362 <LoopFillZerobss>
+
+0800035e <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 800035e:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000360:	3204      	adds	r2, #4
+
+08000362 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000362:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000364:	d3fb      	bcc.n	800035e <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000366:	f000 f811 	bl	800038c <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 800036a:	f7ff ffca 	bl	8000302 <main>
+
+0800036e <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 800036e:	e7fe      	b.n	800036e <LoopForever>
+  ldr   r0, =_estack
+ 8000370:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 8000374:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000378:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 800037c:	080003f4 	.word	0x080003f4
+  ldr r2, =_sbss
+ 8000380:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8000384:	2000001c 	.word	0x2000001c
+
+08000388 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000388:	e7fe      	b.n	8000388 <ADC_IRQHandler>
+	...
+
+0800038c <__libc_init_array>:
+ 800038c:	b570      	push	{r4, r5, r6, lr}
+ 800038e:	4d0d      	ldr	r5, [pc, #52]	; (80003c4 <__libc_init_array+0x38>)
+ 8000390:	4c0d      	ldr	r4, [pc, #52]	; (80003c8 <__libc_init_array+0x3c>)
+ 8000392:	1b64      	subs	r4, r4, r5
+ 8000394:	10a4      	asrs	r4, r4, #2
+ 8000396:	2600      	movs	r6, #0
+ 8000398:	42a6      	cmp	r6, r4
+ 800039a:	d109      	bne.n	80003b0 <__libc_init_array+0x24>
+ 800039c:	4d0b      	ldr	r5, [pc, #44]	; (80003cc <__libc_init_array+0x40>)
+ 800039e:	4c0c      	ldr	r4, [pc, #48]	; (80003d0 <__libc_init_array+0x44>)
+ 80003a0:	f000 f818 	bl	80003d4 <_init>
+ 80003a4:	1b64      	subs	r4, r4, r5
+ 80003a6:	10a4      	asrs	r4, r4, #2
+ 80003a8:	2600      	movs	r6, #0
+ 80003aa:	42a6      	cmp	r6, r4
+ 80003ac:	d105      	bne.n	80003ba <__libc_init_array+0x2e>
+ 80003ae:	bd70      	pop	{r4, r5, r6, pc}
+ 80003b0:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80003b4:	4798      	blx	r3
+ 80003b6:	3601      	adds	r6, #1
+ 80003b8:	e7ee      	b.n	8000398 <__libc_init_array+0xc>
+ 80003ba:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80003be:	4798      	blx	r3
+ 80003c0:	3601      	adds	r6, #1
+ 80003c2:	e7f2      	b.n	80003aa <__libc_init_array+0x1e>
+ 80003c4:	080003ec 	.word	0x080003ec
+ 80003c8:	080003ec 	.word	0x080003ec
+ 80003cc:	080003ec 	.word	0x080003ec
+ 80003d0:	080003f0 	.word	0x080003f0
+
+080003d4 <_init>:
+ 80003d4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80003d6:	bf00      	nop
+ 80003d8:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80003da:	bc08      	pop	{r3}
+ 80003dc:	469e      	mov	lr, r3
+ 80003de:	4770      	bx	lr
+
+080003e0 <_fini>:
+ 80003e0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80003e2:	bf00      	nop
+ 80003e4:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80003e6:	bc08      	pop	{r3}
+ 80003e8:	469e      	mov	lr, r3
+ 80003ea:	4770      	bx	lr

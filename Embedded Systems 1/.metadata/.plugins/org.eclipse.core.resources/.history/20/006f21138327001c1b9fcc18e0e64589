@@ -1,0 +1,55 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/5/2021
+//
+//	File:
+//		main.S
+//	Description of File:
+//		Lab 4 driver program
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global main
+
+main:
+	BL LCD_Init			// Initialize display
+
+	LDR R1, =msg01		// Load string address
+	BL LCD_PrintString	// Print the string
+
+	MOV R0, #1
+	MOV R1, #0
+	BL LCD_MoveCursor
+
+	LDR R1, =msg02
+	BL LCD_PrintString
+
+	MOV R7, #0
+1:
+	MOV R0, #1
+	MOV R1, #9
+	BL LCD_MoveCursor
+
+	MOV R1, R7
+	BL LCD_PrintNum
+	ADD R7, R7, #1
+
+	MOV R1, #0x3E8
+	BL delay_ms
+
+	B 1b
+
+end: B end
+
+
+// RAM starts at address 0x20000000
+.section .data
+msg01: 	.asciz "Hello, World!"
+msg02:	.asciz "NumTest: "

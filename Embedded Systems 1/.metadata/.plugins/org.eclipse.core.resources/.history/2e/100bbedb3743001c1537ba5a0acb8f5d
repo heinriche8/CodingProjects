@@ -1,0 +1,39 @@
+// Reserve one register for decimal value
+// Reserve another register for whole value
+// R0 = Whole Num. Return
+// R1 = Decimal Return
+// R2 = Argument
+mV_to_C:
+
+	// Convert number to ASCII to extract
+	// Decimal value
+	MOV R1, R2
+	BL num_to_ASCII
+
+	// R0 contains the ASCII now
+
+	// Extract the number from the last digit
+	// All ASCII numbers are 0x3N where N is the number,
+	// so it can be extracted by and-ing with 0xF
+	MOV R3, #0x0F
+	AND R1, R3, R0
+
+	// Divide by 10
+	MOV R3, #10
+	UDIV R2, R2, R3
+
+	// Subtract our offset
+	SUB R2, #47
+
+C_to_F:
+
+// R0 = Return
+// R1 = Arg
+// This assumes 10-bit sampling
+ADC_to_mV:
+	PUSH {R1, R2, LR}
+
+	MOV R2, #3
+	MUL R0, R1, R2
+
+	POP {R1, R2, PC}

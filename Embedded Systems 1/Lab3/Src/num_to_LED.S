@@ -1,0 +1,51 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		num_to_LED.S
+//	Description of File:
+//		Lab 3, Displays a number on the 10 LEDs on GPIOB
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+// Constants
+.equ RCC_BASE, 0x40023800
+.equ RCC_AHB1ENR, 0x30 		// Offset from RCC_BASE
+.equ GPIOBEN, 1<<1 			// GPIOBEN lives on bit 1 of AHB1ENR so shift a 1 left by 1
+
+.equ GPIOB_BASE, 0x40020400
+.equ GPIOB_MODER, 0x00 		// Offset from GPIOB_BASE
+.equ GPIOB_ODR, 0x14		// Offset from GPIOB_BASE
+
+.global num_to_LED
+
+// 	Function: num_to_LED
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Displays a number provided in R1 using the GPIOB LEDs
+//			->	Note: There are only 10 LEDs, so if the number in R0 uses
+//						more than 10 bits, bit 11+ will be masked off
+//	Args:
+//		R1 - Number to be displayed
+//	Returns:
+//		Void
+num_to_LED:
+	PUSH {R0-R12, LR}	// Backup registers
+
+	AND R1, R1, #0x3FF	// Mask off all but lower 10 bits
+
+	MOV R2, R1			// Scratch Register 1
+	MOV R3, R1			// Scratch Register 2
+	BIC R2, R2, #11		// Clear bit 11 in Scratch Register 1
+	LSR R3, R3, #12		// Shift the upper bits over in Scratch Register 2
+	BFI R2, R3, #12, #15// Overwrite the upper three bits
+
+	POP {R0-R12, LR}	// Restore registers
+	BX LR				// Return from subroutine

@@ -1,0 +1,62 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	9/28/2021
+//
+//	File:
+//		delay.S
+//	Description of File:
+//		Originally created 9/28/2021 for Lab 3
+//		Modified 10/19/2021 for Lab 6, conversion to using
+//		our board's dedicated timers
+//	(opt) Dependancies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global delay_ms
+.global delay_us
+
+// 16,000 clock pulses in one millisecond
+// Possibly use a 32-bit timer with a clock division of 2 or 4
+// Then multiply the desired delay by 16k/[clk]
+
+// 	Function: delay_ms
+//	Register-safe! Pushes all general purpose registers (R0-R12) & LR to the stack
+//	Description:
+//		Busy loop that takes the value stored in Register 0 and waits that many milliseconds
+//		R1 = 4000 (dec) = 1ms
+//		R1 LSL 12 = R1 * 4096
+//	Args:
+//		R1 - Desired delay in milliseconds
+//	Returns:
+//		Void
+//	Register Use:
+//		R1	-	Argument
+delay_ms:
+	PUSH {R0-R12, LR}	// Back up all registers
+	LSL R1, R1, #12		// Conversion to milliseconds
+	1:					// Decrement loop
+		SUBS R1, R1, #1	// Decrement by 1
+		BNE 1b			// Loop if not zero
+	POP {R0-R12, LR}	// Restore registers
+	BX LR				// Return from subroutine
+
+// Busy loop for about R1 microseonds
+// Provided by Dr. Livingston in Lab 4
+delay_us:
+	// stack
+	PUSH {R1, LR}
+
+	LSL R1, R1, #3
+
+1:
+	SUBS R1, R1, #1
+	BNE 1b
+
+	// return
+	POP {R1, PC}
+

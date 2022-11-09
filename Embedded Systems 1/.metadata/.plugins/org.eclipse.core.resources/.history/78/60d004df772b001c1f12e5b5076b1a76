@@ -1,0 +1,36 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/12/2021
+//
+//	File:
+//		keypad.S
+//	Description of File:
+//		Lab 5 Keypad API
+//	(opt) Dependencies:
+//		delay.S
+//		LCD_Control.S
+//		keypad.S
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.global Key_Init
+.global Key_GetKey_NoBlock
+.global Key_GetKey
+.global Key_GetChar
+
+Key_Init:
+
+Key_GetKey_NoBlock:
+
+Key_GetKey:
+
+Key_GetChar:
+
+ConfigPort:
+
+.section .rodata
+chars:	.ascii	"123A456B789C*0#D"

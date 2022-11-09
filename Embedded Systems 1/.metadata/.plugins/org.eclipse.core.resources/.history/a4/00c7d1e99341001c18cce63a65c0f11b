@@ -1,0 +1,203 @@
+//	Evan Heinrich
+//	CE2801 sect. 011
+//	10/19/2021
+//
+//	File:
+//		num_to_ASCII.S
+//	Description of File:
+//		Originally created 10/2/2021 for lab 3
+//		Modified 10/19/2021 to add extra functionality
+//		for lab 6
+//	(opt) Dependencies:
+//		N/A
+
+// Assembler Directives
+.syntax unified
+.cpu cortex-m4
+.thumb
+.section .text
+
+.equ MAX_VALUE, 0x270F	// Maximum representable value of 9999
+.equ ERR, 0x4572722E	// Error code, "Err." in ASCII
+.equ ONES_MASK, 0xFFF0	// Masks off the "ones" place BCD
+.equ TENS_MASK, 0xFF0F	// Masks off the "tens" place BCD
+.equ HUND_MASK, 0xF0FF	// Masks off the "hundreds" place BCD
+.equ THOU_MASK, 0x0FFF	// Masks off the "thousands" place BCD
+
+.global num_to_ASCII
+.global ASCII_StringLength
+.global ASCII_StringCompare
+
+// 	Function: num_to_ASCII
+//	Register-safe! Pushes all general purpose registers besides return (R1-R12 & LR) to the stack
+//	Description:
+//		Converts a provided integer value into ASCII characters representing that number
+//	Args:
+//		R1	-	Integer to be converted to ASCII (4 chars MAX)
+//	Returns:
+//		R0	-	ASCII values representing the argument integer
+//	Register Use:
+//		R0	-	Return value
+//		R1	-	Argument
+//		R2	-	Scratch
+//		R3	-	Ones
+//		R4	-	Tens
+//		R5	-	Hundreds
+//		R6	-	Thousands
+//		R7	-	Mask
+num_to_ASCII:
+	PUSH {R1-R12, LR}	// Backup registers
+
+	LDR R2, =MAX_VALUE	// Load max value
+	CMP R1, R2			// Compare the argument to the maximum value
+	BGE error			// Return the error code if the argument is larger than the max.
+	MOV R2, R1			// Copy the argument for modification
+
+	MOV R6, #0			// Clear thousands counter
+mod1000:
+	SUBS R2, R2, #0x3E8	// Subtract 1000, update flags
+	ITET PL					// If positive
+		ADDPL R6, R6, #1	// Increment thousands counter
+		ADDMI R2, R2, #0x3E8// Add back 1000 if negative
+		BPL mod1000			// Otherwise continue looping
+
+	MOV R5, #0			// Clear hundreds counter
+mod100:
+	SUBS R2, R2, #0x64	// Subtract 100, update flags
+	ITET PL					//If positive
+		ADDPL R5, R5, #1	// Increment hundreds counter
+		ADDMI R2, R2, #0x64	// Add back 100 if negative
+		BPL mod100			// Otherwise continue looping
+
+	MOV R4, #0			// Clear tens register
+mod10:
+	SUBS R2, R2, #0xA	// Subtract 10, update flags
+	ITET PL					// If positive
+		ADDPL R4, R4, #1	// Increment tens counter
+		ADDMI R2, R2, #0xA	// Add back 10 if negative
+		BPL mod10			// Otherwise continue looping
+
+	MOV R3, R2			// Whatever is left is the ones place
+	MOV R2, #0			// Clear register 2
+
+	MOV R7, #0x30		// Load mask for numeric ASCII values
+
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R6		// Apply thousands place
+	LSL R2, R2, #8		// Shift left 8 for the hundreds place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R5		// Apply hundreds place
+	LSL R2, R2, #8		// Shift left 8 more for the tens place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R4		// Apply tens place
+	LSL R2, R2, #8		// Shift left last 8 time for the ones place
+	ORR R2, R2, R7		// Apply base mask
+	ORR R2, R2, R3		// Apply ones place
+
+	MOV R0, R2			// Move return value
+
+	POP {R1-R12, LR}	// Restore registers
+	BX LR
+
+	error:
+	LDR R0, =ERR
+	return:
+	POP {R1-R12, LR}
+	BX LR
+
+
+// 	Function: ASCII_StringCompare
+//	Register-safe!
+//	Description:
+//		Compares the contents of two null-terminated strings to determine if they
+//		are equal.
+//		The arguments are memory locations to null-terminated strings.
+//	Args:
+//		R1	-	First String
+//		R2	-	Second string
+//	Returns:
+//		R0	-	0 if equal
+//	Register Use:
+//		R0	-	Return, 0 if equal
+//		R1	-	String1 addr & String1 length
+//		R2	-	String2 addr & String2 length
+//		R3	-	Iterator
+//		R5	-	Backup of String1 length
+//		R6	-	Backup of String1 addr
+//		R7	-	Backup of String2 addr
+ASCII_StringCompare:
+	PUSH {R1-R3, R5-R7, LR}
+
+	// Backup addresses
+	MOV R6, R1
+	MOV R7, R2
+
+	// Get lengths of strings
+	BL ASCII_StringLength	// Length of first string
+	MOV R5, R0				// Move length into a temp register
+	MOV R1, R2				// Move second string into arg register
+	BL ASCII_StringLength	// Length of second string
+	MOV R2, R0				// Move length into R2
+	MOV R1, R5				// Move backup of string 1 length into R1
+
+	// Compare lengths of strings
+	CMP R1, R2				// Compare lengths
+	ITT GT					// If R1 > R2
+		MOVGT R0, #1		// Load 1 into the return register, aka not equal
+		BGT return			// Return
+	ITT LT					// If R1 < R2
+		MOVLT R0, #1		// Load 1 into the return register, aka not equal
+		BLT return			// Return
+
+	// Now the difficult part. At this point, the strings are the same
+	// length, so we need to iterate through the string and compare each char.
+	// This is also the final stage of the comparison, so make sure R0 is
+	// ready to return.
+
+	MOV R0, #0				// Clear return register
+	MOV R3, #0				// Clear an iterator
+	MOV R1, R6				// Restore first address
+	MOV R2, R7				// Restore second address
+
+	1:
+	LDRB R6, [R1, R3]		// Load into a temp register the char at index R3
+	LDRB R7, [R2, R3]		// Load into a temp register the char at index R3
+	CMP R6, R7				// Compare the two chars
+	ITT NE					// If the chars are not equal
+		MOVNE R0, #1		// Load 1 into the return register, aka not equal
+		BNE return			// Return
+
+	ADD R3, #1				// Increment iterator
+	CMP R3, R5				// Compare incremented iterator to string length
+	BGT return				// If the iterator is greater than the string length, return
+							// That means all of the chars were equal.
+
+	B 1b					// Otherwise keep looping
+
+	return:
+	POP {R1-R3, R5-R7, PC}
+
+
+// 	Function: ASCII_StringLength
+//	Register-safe!
+//	Description:
+//		Determines the length of a null-terminated string in memory
+//	Args:
+//		R1	-	String address
+//	Returns:
+//		R0	-	Length
+//	Register Use:
+//
+ASCII_StringLength:
+	PUSH {R1, R2, LR}
+
+	MOV R0, #0			// Clear iterator
+
+1:
+	LDRB R2, [R1, R0]	// Load character at index R0
+	CMP R2, #0			// Determine if the char is null
+	ITT NE
+		ADDNE R0, #1	// Increment iterator if not zero
+		BNE 1b
+
+	POP {R1, R2, PC}

@@ -1,0 +1,20 @@
+12:38:47 **** Incremental Build of configuration Debug for project Lab5 ****
+make -j8 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o" "../Src/main.S"
+arm-none-eabi-gcc -o "Lab5.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\enhoh\Documents\CE2801\Labs\Lab5\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lab5.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Lab5.elf
+ 
+arm-none-eabi-size   Lab5.elf 
+arm-none-eabi-objdump -h -S  Lab5.elf  > "Lab5.list"
+arm-none-eabi-objcopy  -O binary  Lab5.elf  "Lab5.bin"
+   text	   data	    bss	    dec	    hex	filename
+   1804	      8	   1568	   3380	    d34	Lab5.elf
+Finished building: default.size.stdout
+ 
+Finished building: Lab5.bin
+ 
+Finished building: Lab5.list
+ 
+
+12:38:48 Build Finished. 0 errors, 0 warnings. (took 438ms)
+
