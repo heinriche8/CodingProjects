@@ -1,0 +1,234 @@
+Flow report for DE10_Lite_Computer
+Mon May 09 11:38:41 2022
+Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Flow Summary
+  3. Flow Settings
+  4. Flow Non-Default Global Settings
+  5. Flow Elapsed Time
+  6. Flow OS Summary
+  7. Flow Log
+  8. Flow Messages
+  9. Flow Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2018  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details.
+
+
+
++----------------------------------------------------------------------------------+
+; Flow Summary                                                                     ;
++------------------------------------+---------------------------------------------+
+; Flow Status                        ; Successful - Mon May 09 11:38:27 2022       ;
+; Quartus Prime Version              ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
+; Revision Name                      ; DE10_Lite_Computer                          ;
+; Top-level Entity Name              ; DE10_Lite_Computer                          ;
+; Family                             ; MAX 10                                      ;
+; Device                             ; 10M50DAF484C7G                              ;
+; Timing Models                      ; Final                                       ;
+; Total logic elements               ; 15,827 / 49,760 ( 32 % )                    ;
+;     Total combinational functions  ; 13,982 / 49,760 ( 28 % )                    ;
+;     Dedicated logic registers      ; 9,115 / 49,760 ( 18 % )                     ;
+; Total registers                    ; 9184                                        ;
+; Total pins                         ; 160 / 360 ( 44 % )                          ;
+; Total virtual pins                 ; 0                                           ;
+; Total memory bits                  ; 98,083 / 1,677,312 ( 6 % )                  ;
+; Embedded Multiplier 9-bit elements ; 7 / 288 ( 2 % )                             ;
+; Total PLLs                         ; 3 / 4 ( 75 % )                              ;
+; UFM blocks                         ; 0 / 1 ( 0 % )                               ;
+; ADC blocks                         ; 1 / 2 ( 50 % )                              ;
++------------------------------------+---------------------------------------------+
+
+
++-----------------------------------------+
+; Flow Settings                           ;
++-------------------+---------------------+
+; Option            ; Setting             ;
++-------------------+---------------------+
+; Start date & time ; 05/09/2022 11:34:54 ;
+; Main task         ; Compilation         ;
+; Revision Name     ; DE10_Lite_Computer  ;
++-------------------+---------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                                                                                                      ;
++-------------------------------------+------------------------------------------------------------------------------------------------------------------+---------------+-----------------+------------+
+; Assignment Name                     ; Value                                                                                                            ; Default Value ; Entity Name     ; Section Id ;
++-------------------------------------+------------------------------------------------------------------------------------------------------------------+---------------+-----------------+------------+
+; COMPILER_SIGNATURE_ID               ; 1096275979470.165211409407616                                                                                    ; --            ; --              ; --         ;
+; ENABLE_SIGNALTAP                    ; On                                                                                                               ; --            ; --              ; --         ;
+; MAX_CORE_JUNCTION_TEMP              ; 85                                                                                                               ; --            ; --              ; --         ;
+; MIN_CORE_JUNCTION_TEMP              ; 0                                                                                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/../../Computer_System.qsys                                                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/Computer_System.vhd                                                                   ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/computer_system_rst_controller.vhd                                                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/computer_system_rst_controller_001.vhd                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_reset_controller.v                                                  ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_reset_synchronizer.v                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_reset_controller.sdc                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_irq_mapper.sv                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0.v                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_002.vhd                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_002_error_adapter_0.sv ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter.vhd                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0.sv     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_width_adapter.sv                                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_address_alignment.sv                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_burst_uncompressor.sv                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux_002.sv                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_arbitrator.sv                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux_001.sv                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv                               ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_rsp_demux_002.sv                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_cmd_mux_002.sv                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv                               ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux_002.sv                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux_001.sv                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_burst_adapter.sv                                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_burst_adapter_uncmpr.sv                                      ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_burst_adapter_13_1.sv                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_burst_adapter_new.sv                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_incr_burst_converter.sv                                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_wrap_burst_converter.sv                                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_default_burst_converter.sv                                          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_pipeline_stage.sv                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_pipeline_base.v                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_traffic_limiter.sv                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_reorder_memory.sv                                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_sc_fifo.v                                                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router_005.sv                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router_004.sv                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router_003.sv                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router_002.sv                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router_001.sv                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_mm_interconnect_0_router.sv                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_slave_agent.sv                                               ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_master_agent.sv                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_slave_translator.sv                                          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_merlin_master_translator.sv                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_customins_slave_translator.sv                                       ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_custom_instruction_master_multi_xconnect.sv          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_customins_master_translator.v                                       ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_System_PLL.vhd                                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_up_avalon_reset_from_locked_signal.v                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_up_altpll.v                                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Slider_Switches.vhd                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_SDRAM.vhd                                                  ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_SDRAM_test_component.vhd                                   ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Pushbuttons.vhd                                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/fpoint_wrapper.v                                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/fpoint_qsys.v                                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/fpoint_hw_qsys.v                                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2.v                                                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu.sdc                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu.v                                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_debug_slave_sysclk.v                             ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_debug_slave_tck.v                                ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_debug_slave_wrapper.v                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_nios2_waves.do                                   ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.dat                      ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.hex                      ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.mif                      ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.dat                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.hex                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.mif                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.dat                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.hex                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.mif                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Nios2_cpu_test_bench.v                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_LEDs.vhd                                                   ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge.vhd                                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_p2b_adapter.sv                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_b2p_adapter.sv                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_packets_to_master.v                                          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_packets_to_bytes.v                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_bytes_to_packets.v                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_timing_adt.sv                          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_jtag_interface.v                                          ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_jtag_dc_streaming.v                                                 ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_jtag_sld_node.v                                                     ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_jtag_streaming.v                                                    ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_clock_crosser.v                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_std_synchronizer_nocut.v                                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_idle_remover.v                                            ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_idle_inserter.v                                           ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/altera_avalon_st_jtag_interface.sdc                                        ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_JTAG_UART.vhd                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_Interval_Timer.vhd                                         ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_HEX5_HEX4.vhd                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/simulation/submodules/Computer_System_HEX3_HEX0.vhd                                              ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/synthesis/../Computer_System.cmp                                                                 ; --            ; --              ; --         ;
+; MISC_FILE                           ; Computer_System/synthesis/../../Computer_System.qsys                                                             ; --            ; --              ; --         ;
+; PARTITION_COLOR                     ; -- (Not supported for targeted family)                                                                           ; --            ; --              ; Top        ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family)                                                                           ; --            ; --              ; Top        ;
+; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family)                                                                           ; --            ; --              ; Top        ;
+; POWER_BOARD_THERMAL_MODEL           ; None (CONSERVATIVE)                                                                                              ; --            ; --              ; --         ;
+; POWER_PRESET_COOLING_SOLUTION       ; 23 MM HEAT SINK WITH 200 LFPM AIRFLOW                                                                            ; --            ; --              ; --         ;
+; SLD_FILE                            ; Computer_System/synthesis/Computer_System.regmap                                                                 ; --            ; --              ; --         ;
+; SLD_FILE                            ; Computer_System/synthesis/Computer_System.debuginfo                                                              ; --            ; --              ; --         ;
+; SLD_INFO                            ; QSYS_NAME Computer_System HAS_SOPCINFO 1 GENERATION_ID 1652113091                                                ; --            ; Computer_System ; --         ;
+; SOPCINFO_FILE                       ; Computer_System/synthesis/../../Computer_System.sopcinfo                                                         ; --            ; --              ; --         ;
+; SPD_FILE                            ; Computer_System/simulation/../Computer_System.spd                                                                ; --            ; --              ; --         ;
+; SYNTHESIS_ONLY_QIP                  ; On                                                                                                               ; --            ; --              ; --         ;
+; USE_SIGNALTAP_FILE                  ; stp1.stp                                                                                                         ; --            ; --              ; --         ;
++-------------------------------------+------------------------------------------------------------------------------------------------------------------+---------------+-----------------+------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:01:41     ; 1.0                     ; 5329 MB             ; 00:01:58                           ;
+; Fitter               ; 00:01:33     ; 1.5                     ; 6170 MB             ; 00:03:20                           ;
+; Assembler            ; 00:00:04     ; 1.0                     ; 4757 MB             ; 00:00:04                           ;
+; Timing Analyzer      ; 00:00:13     ; 2.7                     ; 5052 MB             ; 00:00:29                           ;
+; Total                ; 00:03:31     ; --                      ; --                  ; 00:05:51                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+
+
++------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                    ;
++----------------------+------------------+------------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++----------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis ; DESKTOP-H7KEU2M  ; Windows 10 ; 10.0       ; x86_64         ;
+; Fitter               ; DESKTOP-H7KEU2M  ; Windows 10 ; 10.0       ; x86_64         ;
+; Assembler            ; DESKTOP-H7KEU2M  ; Windows 10 ; 10.0       ; x86_64         ;
+; Timing Analyzer      ; DESKTOP-H7KEU2M  ; Windows 10 ; 10.0       ; x86_64         ;
++----------------------+------------------+------------+------------+----------------+
+
+
+------------
+; Flow Log ;
+------------
+quartus_map --read_settings_files=on --write_settings_files=off DE10_Lite_Computer -c DE10_Lite_Computer
+quartus_fit --read_settings_files=off --write_settings_files=off DE10_Lite_Computer -c DE10_Lite_Computer
+quartus_asm --read_settings_files=off --write_settings_files=off DE10_Lite_Computer -c DE10_Lite_Computer
+quartus_sta DE10_Lite_Computer -c DE10_Lite_Computer
+
+
+

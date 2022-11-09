@@ -1,0 +1,63 @@
+-- ********************************************************
+-- * project:     dseg7
+-- * filename:    dseg7.vhd
+-- * author:      heinriche@msoe.edu
+-- * date:        MSOE Spring Quarter 2022
+-- * provides:    Hardware decoder for ASCII to dseg7
+-- * approach:    with/select
+-- ********************************************************
+
+-- use library packages 
+-- std_logic_1164: 9-valued logic signal voltages 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity dseg7 is port(
+	ASCII:	in 	std_logic_vector(7 downto 0);
+	DATA:		out	std_logic_vector(7 downto 0)
+);
+end entity dseg7;
+
+architecture DATAFLOW of dseg7 is
+begin
+	with ASCII select DATA <=
+		x"77" when x"61",	-- ascii a
+		x"7C" when x"62",	-- ascii b
+		x"58" when x"63",	-- ascii c
+		x"5E" when x"64",	-- ascii d
+		x"79" when x"65",	-- ascii e
+		x"71" when x"66",	-- ascii f
+		x"3D" when x"67",	-- ascii g
+		x"7A" when x"68",	-- ascii h
+		x"04" when x"69",	-- ascii i
+		x"1E" when x"6A",	-- ascii j
+		x"75" when x"6B",	-- ascii k
+		x"38" when x"6C",	-- ascii l
+		x"37" when x"6D",	-- ascii m
+		x"54" when x"6E",	-- ascii n
+		x"5C" when x"6F",	-- ascii o
+		x"73" when x"70",	-- ascii p
+		x"67" when x"71",	-- ascii q
+		x"50" when x"72",	-- ascii r
+		x"6c" when x"73",	-- ascii s
+		x"78" when x"74",	-- ascii t
+		x"1C" when x"75",	-- ascii u
+		x"3E" when x"76",	-- ascii v
+		x"7E" when x"77",	-- ascii w
+		x"76" when x"78",	-- ascii x
+		x"6E" when x"79",	-- ascii y
+		x"1B" when x"7A",	-- ascii z
+		x"3F" when x"30",	-- ascii 0
+		x"06" when x"31",	-- ascii 1
+		x"5B" when x"32",	-- ascii 2
+		x"4F" when x"33",	-- ascii 3
+		x"66" when x"34",	-- ascii 4
+		x"6D" when x"35",	-- ascii 5
+		x"7D" when x"36",	-- ascii 6
+		x"07" when x"37",	-- ascii 7
+		x"7F" when x"38",	-- ascii 8
+		x"6F" when x"39",	-- ascii 9
+		x"80" when others;	-- Just the decimal point
+
+end architecture DATAFLOW;

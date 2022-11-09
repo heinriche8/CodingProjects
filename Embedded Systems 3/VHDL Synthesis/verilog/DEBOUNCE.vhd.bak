@@ -1,0 +1,13 @@
+-- Generic D flip flop for debouncing
+
+library ieee;
+use ieee.std_logic_1164;
+
+entity DEBOUNCE is port (
+);
+end entity;
+
+architecture BEHAV of DEBOUNCE is
+
+begin
+end architecture;

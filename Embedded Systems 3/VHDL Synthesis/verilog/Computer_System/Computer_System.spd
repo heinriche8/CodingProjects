@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_002_error_adapter_0.sv"
+   type="SYSTEM_VERILOG"
+   library="error_adapter_0" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_error_adapter_0.sv"
+   type="SYSTEM_VERILOG"
+   library="error_adapter_0" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter_002.vhd"
+   type="VHDL"
+   library="avalon_st_adapter_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_avalon_st_adapter.vhd"
+   type="VHDL"
+   library="avalon_st_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_width_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_rsp_width_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_rsp_width_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_uncompressor.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_rsp_width_adapter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux_002.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux_002" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux_001.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux_001" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux_001" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_rsp_demux_002.sv"
+   type="SYSTEM_VERILOG"
+   library="rsp_demux_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_mux_002.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux_002" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_mux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/altera_merlin_arbitrator.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_mux" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux_002.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux_001.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux_001" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_cmd_demux.sv"
+   type="SYSTEM_VERILOG"
+   library="cmd_demux" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_uncmpr.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_13_1.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_adapter_new.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_incr_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_wrap_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_default_burst_converter.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_address_alignment.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_stage.sv"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_base.v"
+   type="SYSTEM_VERILOG"
+   library="SDRAM_s1_burst_adapter" />
+ <file
+   path="simulation/submodules/altera_merlin_traffic_limiter.sv"
+   type="SYSTEM_VERILOG"
+   library="JTAG_to_FPGA_Bridge_master_limiter" />
+ <file
+   path="simulation/submodules/altera_merlin_reorder_memory.sv"
+   type="SYSTEM_VERILOG"
+   library="JTAG_to_FPGA_Bridge_master_limiter" />
+ <file
+   path="simulation/submodules/altera_avalon_sc_fifo.v"
+   type="SYSTEM_VERILOG"
+   library="JTAG_to_FPGA_Bridge_master_limiter" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_base.v"
+   type="SYSTEM_VERILOG"
+   library="JTAG_to_FPGA_Bridge_master_limiter" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_005.sv"
+   type="SYSTEM_VERILOG"
+   library="router_005" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_004.sv"
+   type="SYSTEM_VERILOG"
+   library="router_004" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_003.sv"
+   type="SYSTEM_VERILOG"
+   library="router_003" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_002.sv"
+   type="SYSTEM_VERILOG"
+   library="router_002" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router_001.sv"
+   type="SYSTEM_VERILOG"
+   library="router_001" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0_router.sv"
+   type="SYSTEM_VERILOG"
+   library="router" />
+ <file
+   path="simulation/submodules/altera_merlin_slave_agent.sv"
+   type="SYSTEM_VERILOG"
+   library="JTAG_UART_avalon_jtag_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_burst_uncompressor.sv"
+   type="SYSTEM_VERILOG"
+   library="JTAG_UART_avalon_jtag_slave_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_master_agent.sv"
+   type="SYSTEM_VERILOG"
+   library="Nios2_data_master_agent" />
+ <file
+   path="simulation/submodules/altera_merlin_slave_translator.sv"
+   type="SYSTEM_VERILOG"
+   library="JTAG_UART_avalon_jtag_slave_translator" />
+ <file
+   path="simulation/submodules/altera_merlin_master_translator.sv"
+   type="SYSTEM_VERILOG"
+   library="Nios2_data_master_translator" />
+ <file
+   path="simulation/submodules/altera_up_avalon_reset_from_locked_signal.v"
+   type="VERILOG"
+   library="reset_from_locked" />
+ <file
+   path="simulation/submodules/altera_up_altpll.v"
+   type="VERILOG"
+   library="sys_pll" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu.sdc"
+   type="SDC"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu.v"
+   type="VERILOG"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_debug_slave_sysclk.v"
+   type="VERILOG"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_debug_slave_tck.v"
+   type="VERILOG"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_debug_slave_wrapper.v"
+   type="VERILOG"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_nios2_waves.do"
+   type="OTHER"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.dat"
+   type="DAT"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.hex"
+   type="HEX"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_ociram_default_contents.mif"
+   type="MIF"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.dat"
+   type="DAT"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.hex"
+   type="HEX"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_a.mif"
+   type="MIF"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.dat"
+   type="DAT"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.hex"
+   type="HEX"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_rf_ram_b.mif"
+   type="MIF"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_cpu_test_bench.v"
+   type="VERILOG"
+   library="cpu" />
+ <file
+   path="simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_p2b_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="p2b_adapter" />
+ <file
+   path="simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_b2p_adapter.sv"
+   type="SYSTEM_VERILOG"
+   library="b2p_adapter" />
+ <file
+   path="simulation/submodules/altera_avalon_packets_to_master.v"
+   type="VERILOG"
+   library="transacto" />
+ <file
+   path="simulation/submodules/altera_avalon_st_packets_to_bytes.v"
+   type="VERILOG"
+   library="p2b" />
+ <file
+   path="simulation/submodules/altera_avalon_st_bytes_to_packets.v"
+   type="VERILOG"
+   library="b2p" />
+ <file
+   path="simulation/submodules/altera_avalon_sc_fifo.v"
+   type="VERILOG"
+   library="fifo" />
+ <file
+   path="simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge_timing_adt.sv"
+   type="SYSTEM_VERILOG"
+   library="timing_adt" />
+ <file
+   path="simulation/submodules/altera_avalon_st_jtag_interface.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_jtag_dc_streaming.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_jtag_sld_node.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_jtag_streaming.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_clock_crosser.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_std_synchronizer_nocut.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_base.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_idle_remover.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_idle_inserter.v"
+   type="VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_pipeline_stage.sv"
+   type="SYSTEM_VERILOG"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_avalon_st_jtag_interface.sdc"
+   type="SDC"
+   library="jtag_phy_embedded_in_jtag_master" />
+ <file
+   path="simulation/submodules/altera_reset_controller.v"
+   type="VERILOG"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/altera_reset_synchronizer.v"
+   type="VERILOG"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/altera_reset_controller.sdc"
+   type="SDC"
+   library="rst_controller" />
+ <file
+   path="simulation/submodules/Computer_System_irq_mapper.sv"
+   type="SYSTEM_VERILOG"
+   library="irq_mapper" />
+ <file
+   path="simulation/submodules/Computer_System_mm_interconnect_0.v"
+   type="VERILOG"
+   library="mm_interconnect_0" />
+ <file
+   path="simulation/submodules/altera_customins_slave_translator.sv"
+   type="SYSTEM_VERILOG"
+   library="Nios2_custom_instruction_master_multi_slave_translator0" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2_custom_instruction_master_multi_xconnect.sv"
+   type="SYSTEM_VERILOG"
+   library="Nios2_custom_instruction_master_multi_xconnect" />
+ <file
+   path="simulation/submodules/altera_customins_master_translator.v"
+   type="VERILOG"
+   library="Nios2_custom_instruction_master_translator" />
+ <file
+   path="simulation/submodules/Computer_System_System_PLL.vhd"
+   type="VHDL"
+   library="System_PLL" />
+ <file
+   path="simulation/submodules/Computer_System_Slider_Switches.vhd"
+   type="VHDL"
+   library="Slider_Switches" />
+ <file
+   path="simulation/submodules/Computer_System_SDRAM.vhd"
+   type="VHDL"
+   library="SDRAM" />
+ <file
+   path="simulation/submodules/Computer_System_SDRAM_test_component.vhd"
+   type="VHDL"
+   library="SDRAM" />
+ <file
+   path="simulation/submodules/Computer_System_Pushbuttons.vhd"
+   type="VHDL"
+   library="Pushbuttons" />
+ <file
+   path="simulation/submodules/fpoint_wrapper.v"
+   type="VERILOG"
+   library="Nios2_Floating_Point" />
+ <file
+   path="simulation/submodules/fpoint_qsys.v"
+   type="VERILOG"
+   library="Nios2_Floating_Point" />
+ <file
+   path="simulation/submodules/fpoint_hw_qsys.v"
+   type="VERILOG"
+   library="Nios2_Floating_Point" />
+ <file
+   path="simulation/submodules/Computer_System_Nios2.v"
+   type="VERILOG"
+   library="Nios2" />
+ <file
+   path="simulation/submodules/Computer_System_LEDs.vhd"
+   type="VHDL"
+   library="LEDs" />
+ <file
+   path="simulation/submodules/Computer_System_JTAG_to_FPGA_Bridge.vhd"
+   type="VHDL"
+   library="JTAG_to_FPGA_Bridge" />
+ <file
+   path="simulation/submodules/Computer_System_JTAG_UART.vhd"
+   type="VHDL"
+   library="JTAG_UART" />
+ <file
+   path="simulation/submodules/Computer_System_Interval_Timer.vhd"
+   type="VHDL"
+   library="Interval_Timer" />
+ <file
+   path="simulation/submodules/Computer_System_HEX5_HEX4.vhd"
+   type="VHDL"
+   library="HEX5_HEX4" />
+ <file
+   path="simulation/submodules/Computer_System_HEX3_HEX0.vhd"
+   type="VHDL"
+   library="HEX3_HEX0" />
+ <file path="simulation/Computer_System.vhd" type="VHDL" />
+ <file path="simulation/computer_system_rst_controller.vhd" type="VHDL" />
+ <file path="simulation/computer_system_rst_controller_001.vhd" type="VHDL" />
+ <topLevel name="Computer_System" />
+ <deviceFamily name="max10" />
+</simPackage>
